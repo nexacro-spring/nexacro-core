@@ -1,0 +1,21 @@
+# central에 존재하지 않는 library는 아래 3개이다.
+mvn install:install-file -Dfile=./lib/nexacro-xapi-1.0.jar -DgroupId=com.nexacro -DartifactId=nexacro-xapi -Dversion=1.0 -Dpackaging=jar
+mvn install:install-file -Dfile=./lib/nexacro-xeni-1.2.jar -DgroupId=com.nexacro -DartifactId=nexacro-xeni -Dversion=1.2 -Dpackaging=jar
+mvn install:install-file -Dfile=./lib/xstream-1.4.2.jar -DgroupId=xstream -DartifactId=xstream -Dversion=1.4.2 -Dpackaging=jar
+
+mvn install:install-file -Dfile=./lib/commons-logging-1.1.jar -DgroupId=commons-logging -DartifactId=commons-logging -Dversion=1.1 -Dpackaging=jar
+mvn install:install-file -Dfile=./lib/commons-codec-1.5.jar -DgroupId=commons-codec -DartifactId=commons-codec -Dversion=1.5 -Dpackaging=jar
+mvn install:install-file -Dfile=./lib/commons-fileupload-1.3.1.jar -DgroupId=commons-fileupload -DartifactId=commons-fileupload -Dversion=1.3.1 -Dpackaging=jar
+mvn install:install-file -Dfile=./lib/commons-io-2.2.jar -DgroupId=commons-io -DartifactId=commons-io -Dversion=2.2 -Dpackaging=jar
+mvn install:install-file -Dfile=./lib/dom4j-1.6.1.jar -DgroupId=dom4j -DartifactId=dom4j -Dversion=1.6.1 -Dpackaging=jar
+mvn install:install-file -Dfile=./lib/log4j-1.2.13.jar -DgroupId=log4j -DartifactId=log4j -Dversion=1.2.13 -Dpackaging=jar
+mvn install:install-file -Dfile=./lib/poi-3.9-20121203.jar -DgroupId=org.apache.poi -DartifactId=poi -Dversion=3.9 -Dpackaging=jar
+mvn install:install-file -Dfile=./lib/poi-ooxml-3.9-20121203.jar -DgroupId=org.apache.poi -DartifactId=poi-ooxml -Dversion=3.9 -Dpackaging=jar
+mvn install:install-file -Dfile=./lib/poi-ooxml-schemas-3.9-20121203.jar -DgroupId=org.apache.poi -DartifactId=poi-ooxml-schemas -Dversion=3.9 -Dpackaging=jar
+mvn install:install-file -Dfile=./lib/poi-scratchpad-3.9-20121203.jar -DgroupId=org.apache.poi -DartifactId=poi-scratchpad -Dversion=3.9 -Dpackaging=jar
+mvn install:install-file -Dfile=./lib/stax-api-1.0.1.jar -DgroupId=stax -DartifactId=stax-api -Dversion=1.0.1 -Dpackaging=jar
+mvn install:install-file -Dfile=./lib/xmlbeans-2.3.0.jar -DgroupId=org.apache.xmlbeans -DartifactId=xmlbeans -Dversion=2.3.0 -Dpackaging=jar
+mvn install:install-file -Dfile=./lib/xmlpull-1.1.3.1.jar -DgroupId=xmlpull -DartifactId=xmlpull -Dversion=1.1.3.1 -Dpackaging=jar
+mvn install:install-file -Dfile=./lib/xpp3_min-1.1.4c.jar -DgroupId=xpp3 -DartifactId=xpp3_min -Dversion=1.1.4c -Dpackaging=jar
+
+mvn install:install-file -Dfile=./lib/able-core-1.2.1.jar -DgroupId=able -DartifactId=able-core -Dversion=1.2.1 -Dpackaging=jar
