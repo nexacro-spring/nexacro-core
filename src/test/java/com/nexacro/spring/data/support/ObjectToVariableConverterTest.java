@@ -3,14 +3,14 @@ package com.nexacro.spring.data.support;
 import java.util.Map;
 import java.util.Set;
 
+import junit.framework.Assert;
+
 import org.junit.Before;
 import org.junit.Test;
 
 import com.nexacro.spring.data.convert.ConvertDefinition;
 import com.nexacro.spring.data.convert.NexacroConvertException;
 import com.nexacro.xapi.data.Variable;
-
-import junit.framework.Assert;
 
 /**
  * <pre>

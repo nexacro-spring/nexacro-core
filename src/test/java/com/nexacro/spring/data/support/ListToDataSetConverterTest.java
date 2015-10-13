@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import junit.framework.Assert;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -13,11 +15,10 @@ import com.nexacro.spring.data.convert.ConvertDefinition;
 import com.nexacro.spring.data.convert.NexacroConvertException;
 import com.nexacro.spring.data.support.NexacroTestUtil.StaticPropertyBean;
 import com.nexacro.spring.data.support.bean.DefaultBean;
+import com.nexacro.spring.util.ReflectionUtil;
 import com.nexacro.xapi.data.ColumnHeader;
 import com.nexacro.xapi.data.ConstantColumnHeader;
 import com.nexacro.xapi.data.DataSet;
-
-import junit.framework.Assert;
 
 /**
  * <pre>

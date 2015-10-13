@@ -3,7 +3,6 @@ package com.nexacro.spring.data;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.util.Collection;
 import java.util.Locale;
 
 import javax.servlet.ServletOutputStream;

@@ -3,14 +3,14 @@ package com.nexacro.spring.data.convert;
 import java.util.Collection;
 import java.util.List;
 
+import junit.framework.Assert;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.nexacro.xapi.data.DataSet;
 import com.nexacro.xapi.data.Variable;
-
-import junit.framework.Assert;
 
 /**
  * <pre>

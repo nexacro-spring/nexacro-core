@@ -1,9 +1,10 @@
 package com.nexacro.spring.data.support;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import junit.framework.Assert;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -21,8 +22,6 @@ import com.nexacro.spring.data.support.NexacroTestUtil.StaticPropertyBean;
 import com.nexacro.spring.data.support.bean.DefaultBean;
 import com.nexacro.xapi.data.DataSet;
 import com.nexacro.xapi.data.datatype.PlatformDataType;
-
-import junit.framework.Assert;
 
 
 

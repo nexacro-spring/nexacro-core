@@ -4,6 +4,7 @@ package com.nexacro.spring.data.support;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import junit.framework.Assert;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -11,8 +12,6 @@ import org.junit.rules.ExpectedException;
 import org.springframework.beans.NotWritablePropertyException;
 
 import com.nexacro.spring.data.support.bean.DefaultBean;
-
-import junit.framework.Assert;
 
 /**
  * <pre>
