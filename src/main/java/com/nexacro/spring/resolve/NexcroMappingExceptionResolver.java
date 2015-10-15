@@ -51,7 +51,7 @@ public class NexcroMappingExceptionResolver extends AbstractHandlerExceptionReso
             if(ex instanceof NexacroException){ // NexacroConvertException
                 NexacroException nexaExp = (NexacroException) ex;
                 mav.setErrorCode(nexaExp.getErrorCode());
-                mav.setErrorMsg(nexaExp.getErrorMsg());
+                mav.setErrorMsg(nexaExp.getErrorMsg() != null? nexaExp.getErrorMsg(): nexaExp.toString());
             } else {
                 // PlatformException..
                 mav.setErrorCode(NexacroException.DEFAULT_ERROR_CODE);              //Undefined error Code

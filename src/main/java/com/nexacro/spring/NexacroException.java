@@ -42,7 +42,7 @@ public class NexacroException extends Exception {
      *            메시지
      */
     public NexacroException(String message) {
-        super(message);
+        this(message, null);
     }
 
     /**
@@ -55,6 +55,7 @@ public class NexacroException extends Exception {
      */
     public NexacroException(String message, Throwable cause) {
         super(message, cause);
+        this.errorMsg = message;
     }
 
     public int getErrorCode() {
