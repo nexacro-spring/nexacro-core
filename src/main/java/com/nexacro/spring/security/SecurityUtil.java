@@ -28,7 +28,7 @@ import com.nexacro.xapi.data.VariableList;
  *  2015. 8. 11.     Park SeongMin     최초 생성
  * </pre>
  */
-
+@Deprecated
 public abstract class SecurityUtil {
 
     public static void checkSecurity(PlatformData platformData) throws SecurityException {

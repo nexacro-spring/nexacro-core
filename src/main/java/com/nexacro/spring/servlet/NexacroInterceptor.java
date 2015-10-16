@@ -10,6 +10,8 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import com.nexacro.spring.NexacroConstants;
+import com.nexacro.spring.context.NexacroContext;
+import com.nexacro.spring.context.NexacroContextHolder;
 import com.nexacro.xapi.data.Debugger;
 import com.nexacro.xapi.data.PlatformData;
 import com.nexacro.xapi.tx.HttpPlatformRequest;

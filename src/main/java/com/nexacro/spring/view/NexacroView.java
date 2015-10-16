@@ -11,10 +11,10 @@ import org.springframework.util.StopWatch;
 import org.springframework.web.servlet.view.AbstractView;
 
 import com.nexacro.spring.NexacroConstants;
+import com.nexacro.spring.context.NexacroContext;
+import com.nexacro.spring.context.NexacroContextHolder;
 import com.nexacro.spring.data.NexacroFirstRowAccessor;
 import com.nexacro.spring.data.NexacroFirstRowHandler;
-import com.nexacro.spring.servlet.NexacroContext;
-import com.nexacro.spring.servlet.NexacroContextHolder;
 import com.nexacro.spring.util.NexacroUtil;
 import com.nexacro.xapi.data.DataSet;
 import com.nexacro.xapi.data.DataSetList;

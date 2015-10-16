@@ -21,7 +21,7 @@ import com.nexacro.spring.data.convert.NexacroConvertListener;
  *  2015. 8. 9.     Park SeongMin     최초 생성
  * </pre>
  */
-
+@Deprecated
 public class NexacroWebSecurityListener implements NexacroConvertListener {
 
     @Override

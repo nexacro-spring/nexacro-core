@@ -1,4 +1,4 @@
-package com.nexacro.spring.servlet;
+package com.nexacro.spring.context;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
