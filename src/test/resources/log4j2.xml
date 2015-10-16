@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+  	<Appenders>
+        <Console name="console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d %5p [%c] %m%n" />
+        </Console>
+        <!-- attribute: name(Appender명), fileName(target파일명), append(이어쓰기여부, true(default) or false), locking, immediateFlush, ignoreExceptions, bufferedIO -->
+		<!-- element: Layout(출력패턴설정), Filters -->
+		<!-- append="false"이면 매번 로깅 시 기존 로그 파일을 clear하고 새로 로깅 -->
+		<File name="file" fileName="./logs/file/sample.log" append="false">
+			<PatternLayout pattern="%d %5p [%c] %m%n" />
+		</File>	
+		<File name="mdcFile" fileName="./logs/file/mdcSample.log" append="false">
+			<!-- Thread Context Map(also known as MDC) 객체의 key와 매칭되는 value를 로깅 - %X{key} -->
+		  	<!-- ex) ThreadContext.put(“testKey”, “testValue”);인 경우, 레이아웃 패턴 %X{testKey}에 의해 “testValue” 로깅 -->
+		  	<PatternLayout pattern="%d %5p [%c] [%X{class} %X{method} %X{testKey}] %m%n" />
+		</File>
+		<!-- attribute: name(Appender명), fileName(target파일명), filePattern(history파일명), append, immediateFlush, ignoreExceptions, bufferedIO -->
+		<!-- element: Layout(출력패턴설정), Filters, Policy(file rolling 조건 설정), Strategy(file name과 location 관련 설정) -->
+		<RollingFile name="rollingFile" fileName="./logs/rolling/rollingSample.log" filePattern="./logs/rolling/rollingSample.%i.log">
+		 	<PatternLayout pattern="%d %5p [%c] %m%n" />
+		 	<Policies>
+		  		<!-- size 단위: Byte(default), KB, MB, or GB -->
+		  		<SizeBasedTriggeringPolicy size="1000" />
+			</Policies>
+			<!-- 기존 maxIndex 속성이 Strategy 엘리먼트로 변경됨 -->
+			<!-- index는 min(default 1)부터 max(default 7)까지 증가, 아래에는 max="3"으로 settting -->
+			<!-- fileIndex="min"이므로 target file의 size가 1000 byte를 넘어가면, fileIndex가 1(min)인 history file에 백업 (fixed window strategy) -->
+			<!-- 그 다음 1000 byte를 넘어가면, rollingSample.1.log을 rollingSample.2.log 파일에 복사하고, target 파일을 rollingSample.1.log에복사한 후 target 파일에 새로 로깅 -->
+			<DefaultRolloverStrategy max="3" fileIndex="min" />
+		</RollingFile>
+    </Appenders>
+    <Loggers>
+        <Logger name="java.sql" level="INFO" additivity="false">
+            <AppenderRef ref="console" />
+        </Logger>
+        <Logger name="egovframework" level="DEBUG" additivity="false">
+            <AppenderRef ref="console" />
+        </Logger>
+          <!-- log SQL with timing information, post execution -->
+        <Logger name="jdbc.sqltiming" level="INFO" additivity="false">
+            <AppenderRef ref="console" />
+        </Logger>
+        <Logger name="org.springframework" level="INFO" additivity="false">
+            <AppenderRef ref="console" />
+        </Logger>
+     	<Logger name="com.nexacro.xapi" level="FATAL" additivity="false">
+            <AppenderRef ref="console" />
+        </Logger>
+        <Logger name="com.nexacro.spring" level="TRACE" additivity="false">
+            <AppenderRef ref="console" />
+        </Logger>
+        <Root level="DEBUG">
+            <AppenderRef ref="console" />
+            <AppenderRef ref="file" />
+        </Root>
+    </Loggers>
+</Configuration>
+
+<!-- LOG4JDBC를 사용하고자 하는 경우 아래와 같이 설정한다.
+ * 로거 정의
+    •jdbc.sqlonly : 
+        SQL문만을 로그로 남기며, PreparedStatement일 경우 관련된 argument 값으로 대체된 SQL문이 보여진다. 
+    •jdbc.sqltiming : 
+        SQL문과 해당 SQL을 실행시키는데 수행된 시간 정보(milliseconds)를 포함한다. 
+    •jdbc.audit : 
+        ResultSet을 제외한 모든 JDBC 호출 정보를 로그로 남긴다. 많은 양의 로그가 생성되므로 특별히 JDBC 문제를 추적해야 할 필요가 있는 경우를 제외하고는 사용을 권장하지 않는다. 
+    •jdbc.resultset : 
+        ResultSet을 포함한 모든 JDBC 호출 정보를 로그로 남기므로 매우 방대한 양의 로그가 생성된다.
+
+    <appender name="sql-appender" class="org.apache.log4j.FileAppender">
+        <param name="File" value="/DES/logs/was/logs/sql.log" />
+        <param name="Append" value="false" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern"
+                value=" -&gt; %d{yyyy-MM-dd HH:mm:ss.SSS} &lt;%t&gt; %m%n%n" />
+        </layout>
+    </appender>
+
+    <! sql 문만 log
+    <logger name="jdbc.sqlonly" additivity="false">
+        <level value="debug" />
+        <appender-ref ref="sql-appender" />
+    </logger>
+    
+    <!  sql 문과 걸린 시간 : log SQL with timing information, post execution
+    <logger name="jdbc.sqltiming" additivity="false">
+        <level value="debug" />
+        <appender-ref ref="sql-timing-appender" />
+    </logger>
+    
+    <!  모든 sql 결과 log : log all jdbc calls except ResultSet calls
+    <logger name="jdbc.audit" additivity="false">
+        <level value="debug" />
+        <appender-ref ref="jdbc-appender" />
+    </logger>
+    
+    <!  log the jdbc ResultSet calls
+    <logger name="jdbc.resultset" additivity="false">
+        <level value="debug" />
+        <appender-ref ref="jdbc-appender" />
+    </logger>
+
+    <!  sql 결과 연결 정보: log connection open/close events and dump of all open connection 
+        numbers 
+    <logger name="jdbc.connection" additivity="false">
+        <level value="debug" />
+        <appender-ref ref="connection-appender" />
+    </logger>
+LOG4JDBC 설정 끝   -->
