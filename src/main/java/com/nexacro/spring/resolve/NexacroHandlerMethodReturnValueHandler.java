@@ -145,7 +145,7 @@ public class NexacroHandlerMethodReturnValueHandler implements HandlerMethodRetu
                 responseView = getView();
             }
         } catch(Exception e) {
-            logger.error("Error handling return value. value"+returnValue+", e="+e +", message="+e.getMessage());
+            logger.error("Error handling return value. value"+returnValue+", e="+e +", message="+e.getMessage(), e);
             throw e;
         } finally {
             sw.stop();
