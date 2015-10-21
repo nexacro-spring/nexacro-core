@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="nexacro able sample">
+<project name="nexacro sample">
     <bannerLeft>
         <name>Maven</name>
         <src>http://maven.apache.org/images/apache-maven-project.png</src>

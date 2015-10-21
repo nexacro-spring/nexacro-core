@@ -41,7 +41,6 @@ public class NexcroMappingExceptionResolver extends AbstractHandlerExceptionReso
 	    // nexacro 요청이 아닌 경우 별도 ExceptionResolver 가 처리 할 수 있도록 null을 반환 한다.
 	    if(NexacroUtil.isNexacroRequest(request)) {
 	        
-	        // for able framework
 	        prepareResolveException(request, response, handler, ex);
             
             // Nexacro Exception 만을 handling 하도록 한다.

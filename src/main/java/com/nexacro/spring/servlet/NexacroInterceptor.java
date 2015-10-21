@@ -60,7 +60,7 @@ public class NexacroInterceptor extends HandlerInterceptorAdapter {
     }
 
     private void parseNexacroRequest(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        // check in able framework
+
 //        checkSecurityWithServletRequest(request);
 //        checkSecurityMultipart(request);
         

@@ -1,0 +1,196 @@
+<!--
+
+jsp 파일로 변경하여 처리하여야 한다.
+
+taglib 등록하여 사용한다.
+<dependency>
+  <groupId>taglibs</groupId>
+  <artifactId>standard</artifactId>
+  <version>1.1.2</version>
+</dependency>
+<dependency>
+  <groupId>javax.servlet</groupId>
+  <artifactId>jstl</artifactId>
+  <version>1.2</version>
+</dependency>
+
+-->
+
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" session="false"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Vroombus</title>
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+<link rel="stylesheet" href="http://jqueryui.com/resources/demos/style.css" />
+<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+
+<style type="text/css">
+* {margin:0;padding:0}
+html,body{margin:0;padding:0;overflow:hidden}
+body{
+    width:100%;
+    height:100%;    
+}
+#top{
+    overflow:hidden;
+    position:absolute;
+    left:0;
+    top:0px;
+    width:100%;
+    
+}
+#content-area{
+    overflow:auto;
+    position:absolute;
+    left:0;
+    top:80px;
+    bottom:0px;
+    width:100%;
+    border-style: solid;
+}
+
+</style>
+</head>
+<body>
+
+<div id="top">
+ <div style="padding: 20px 0px 0px 30px">
+   <h1>API 호출해 BoA요! ver. 1.0.0 [api 갯수: ${fn:length(apis)}]</h1>
+ </div>
+ 
+ <div class="ui-widget" style="padding-left: 30px">
+   <label for="apis">APIs: </label>
+   <input id="apis" size="60" onclick="this.value = '';"/> [login user : ${loginUser.name}]
+ </div>
+</div>
+
+<div id="content-area" style="padding-left: 30px">
+
+<c:forEach items="${apis}" var="api" varStatus="index">
+  <hr>
+  <div style="padding: 7px 0px 2px 0px" id="position${index.count}">
+    <p style="padding-bottom: 5px; font-size: 15px;">[${index.count}] ${api.pattern}</p>
+    <p style="padding-bottom: 5px;">Rest&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <input type="text" id="rest${index.count}" size="100%" value="${api.pattern}"/></p>
+  <c:if test="${empty api.methods}">
+    <p style="padding-bottom: 5px;">Parameter: <input type="text" id="parameter${index.count}" size="100%" value="${api.parameterString}" /> <a href="#" onclick="requestAPI('${index.count}', 'GET'); return false;">GET</a></p>
+  </c:if>
+  <c:forEach items="${api.methods}" var="method">
+    <p style="padding-bottom: 5px;">Parameter: <input type="text" id="parameter${index.count}" size="100%"  value="${api.parameterString}" /> <a href="#" onclick="requestAPI('${index.count}', '${method}'); return false;">${method}</a></p>
+  </c:forEach>
+    <span>response&nbsp;&nbsp;&nbsp;: <a href="#" onclick="removeResponse('${index.count}'); return false;">지우기</a></span>
+    <pre id="jsonResult${index.count}" style="padding-left: 52px"></pre>
+  </div>
+</c:forEach>
+
+ <div>
+   <p style="text-align:center;">최초 만든이: newoverguy</p>
+ </div>
+
+</div>
+
+<div id="load_indicator" style="display:none">
+  <p style="text-align:center; padding:16px 0 0 0"><img src="/img/loading_img.gif" /></p>
+</div>
+
+<script type="text/javascript">
+var selectionColor = "#DBDBDB";
+
+function removeResponse(index) {
+ var jsonResultElement = $('#jsonResult' + index);
+ jsonResultElement.html('');
+}
+
+function requestAPI(index, method) {
+ $('#position' + index).css("background-color", selectionColor);
+ 
+ removeResponse(index);
+ 
+ var jsonResultElement = $('#jsonResult' + index);
+ var loadIndicatorElement = $('#load_indicator');
+ 
+ var action = $("#rest" + index).val();
+ var param_str = encodeURI($("#parameter" + index).val().trim());
+ console.log(param_str);
+ 
+ $.ajax({
+        type: method,
+        headers: {token: "${token}"}, //
+        url: action,
+        data: param_str,
+        beforeSend: function() {
+         loadIndicatorElement.show().fadeIn(); 
+        }
+    }).done(function(data, textStatus, jqXHR) {
+     var resultStr = "";
+     if(data instanceof Object) {
+      resultStr = window.JSON.stringify(data, null, 4);
+     } else {
+      resultStr = data;
+     }
+     jsonResultElement.text(resultStr);
+    }).fail(function(jqXHR, tettStatus, errorThrown) {
+     jsonResultElement.text(tettStatus + ": " + jqXHR.statusText + " " + jqXHR.status);
+    }).always(function() {
+     loadIndicatorElement.fadeOut();
+    });
+}
+
+$.fn.scrollTo = function( target, options, callback ){
+   if(typeof options == 'function' && arguments.length == 2){ callback = options; options = target; }
+   var settings = $.extend({
+     scrollTarget  : target,
+     offsetTop     : 87,
+     duration      : 500,
+     easing        : 'swing'
+   }, options);
+   return this.each(function(){
+     var scrollPane = $(this);
+     var scrollTarget = (typeof settings.scrollTarget == "number") ? settings.scrollTarget : $(settings.scrollTarget);
+     var scrollY = (typeof scrollTarget == "number") ? scrollTarget : scrollTarget.offset().top + scrollPane.scrollTop() - parseInt(settings.offsetTop);
+     scrollPane.animate({scrollTop : scrollY }, parseInt(settings.duration), settings.easing, function(){
+       if (typeof callback == 'function') { callback.call(this); }
+     });
+   });
+}
+
+$(function() {
+    
+    var availableAPIs = [
+<c:forEach items="${apis}" var="api" varStatus="index">
+         {
+         id: "${index.count}",
+         value: "[${index.count}] ${api.pattern} ${api.methods}"
+         }<c:if test="${not index.last}">,</c:if>
+</c:forEach>
+    ];
+
+    $("#apis").autocomplete({
+        source: availableAPIs,
+        autoFocus: true,
+        select: function( event, ui ) {
+         $('#content-area div').css("background-color", "");
+         // scrollTo 하기 전에 css 배경색을 지워야 한다.
+         $('#content-area').scrollTo('#position' + ui.item.id);
+         $('#position' + ui.item.id).css("background-color", selectionColor);
+         
+         
+        }
+      })
+      .keypress(function(e) {
+        var code = (e.keyCode ? e.keyCode : e.which);
+        if(code == 13) {
+          return false;
+        }
+      });
+});
+</script>
+<body>
+</body>
+</html>

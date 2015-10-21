@@ -51,16 +51,18 @@ public class ServiceLayoutController {
 		for (RequestMappingInfo requestMappingInfoKey : reqMappingInfoKeys) {
 
 			HandlerMethod handlerMethod = handlerMethods.get(requestMappingInfoKey);
-
-			Annotation[][] paramAnnotaions = handlerMethod.getMethod().getParameterAnnotations();
+			System.out.println(handlerMethod.getMethod().getName());
 			
 			String[] parameterNames = parameterNameDiscoverer.getParameterNames(handlerMethod.getMethod());
 			
+			Annotation[][] paramAnnotaions = handlerMethod.getMethod().getParameterAnnotations();
 			Set<String> parameters = new HashSet<String>();
 			for (int i = 0; i < paramAnnotaions.length; i++) {
 				Annotation[] annotations = paramAnnotaions[i];
 				for (int j = 0; j < annotations.length; j++) {
 					Annotation annotation = annotations[j];
+					
+					System.out.println("\t"+parameterNames[i]);
 
 					if (annotation instanceof RequestParam) {
 						parameters.add(parameterNames[i]);
@@ -81,7 +83,7 @@ public class ServiceLayoutController {
 
 		model.addAttribute("apis", serviceLayouts);
 
-		return "serviceLayout.html";
+		return "serviceLayout";
 	}
 
 }
