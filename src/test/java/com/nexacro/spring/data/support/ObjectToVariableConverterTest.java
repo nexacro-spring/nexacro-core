@@ -75,9 +75,10 @@ public class ObjectToVariableConverterTest {
         canConvert= converter.canConvert(source, target);
         Assert.assertFalse(source + " to " + target + " can not convertible", canConvert);
         
-        source = java.sql.Date.class;
-        canConvert= converter.canConvert(source, target);
-        Assert.assertFalse(source + " to " + target + " can not convertible", canConvert);
+     // java.sql.Date support
+//        source = java.sql.Date.class;
+//        canConvert= converter.canConvert(source, target);
+//        Assert.assertFalse(source + " to " + target + " can not convertible", canConvert);
     }
     
     @Test
