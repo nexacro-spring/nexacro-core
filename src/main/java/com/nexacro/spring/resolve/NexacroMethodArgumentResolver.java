@@ -239,7 +239,7 @@ public class NexacroMethodArgumentResolver implements HandlerMethodArgumentResol
         DataSet dataSet = nexacroCachedData.getPlatformData().getDataSet(dsName);
         if(dataSet == null) {
             if(logger.isDebugEnabled()) {
-                logger.debug(dsName + " is null.");
+                logger.debug("@ParamDataSet '" + dsName + "' argument is null.");
             }
             return null;
         }
@@ -291,7 +291,7 @@ public class NexacroMethodArgumentResolver implements HandlerMethodArgumentResol
         Variable variable = nexacroCachedData.getPlatformData().getVariable(varName);
         if(variable == null) {
             if(logger.isDebugEnabled()) {
-                logger.debug(varName + " is null.");
+            	logger.debug("@ParamVariable '" + varName + "' argument is null.");
             }
             return null;
             //throw new IllegalArgumentException("invalid @ParamVariable. ex)@ParamVariable(name=\"variableName\") Object var");

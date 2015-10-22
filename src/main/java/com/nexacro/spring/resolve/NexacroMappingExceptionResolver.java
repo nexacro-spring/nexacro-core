@@ -14,9 +14,13 @@ import com.nexacro.spring.util.NexacroUtil;
 import com.nexacro.spring.view.NexacroModelAndView;
 import com.nexacro.spring.view.NexacroView;
 
-public class NexcroMappingExceptionResolver extends AbstractHandlerExceptionResolver {
+public class NexacroMappingExceptionResolver extends AbstractHandlerExceptionResolver {
 
-	private final Logger logger = LoggerFactory.getLogger(NexcroMappingExceptionResolver.class);
+	private final Logger logger = LoggerFactory.getLogger(NexacroMappingExceptionResolver.class);
+
+	private String defaultErrorMsg = NexacroException.DEFAULT_MESSAGE;
+	private boolean shouldSendStackTrace = false;
+	private boolean shouldLogStackTrace = false;
 
     private View view;
 
@@ -32,7 +36,19 @@ public class NexcroMappingExceptionResolver extends AbstractHandlerExceptionReso
         this.view = view;
     }
     
-    public NexcroMappingExceptionResolver() {
+    public void setDefaultErrorMsg(String defaultErrorMsg) {
+		this.defaultErrorMsg = defaultErrorMsg;
+	}
+
+	public void setShouldSendStackTrace(boolean shouldSendStackTrace) {
+		this.shouldSendStackTrace = shouldSendStackTrace;
+	}
+	
+	public void setShouldLogStackTrace(boolean shouldLogStackTrace) {
+		this.shouldLogStackTrace = shouldLogStackTrace;
+	}
+
+	public NexacroMappingExceptionResolver() {
     }
     
 	@Override
@@ -50,12 +66,12 @@ public class NexcroMappingExceptionResolver extends AbstractHandlerExceptionReso
             if(ex instanceof NexacroException){ // NexacroConvertException
                 NexacroException nexaExp = (NexacroException) ex;
                 mav.setErrorCode(nexaExp.getErrorCode());
-                mav.setErrorMsg(nexaExp.getErrorMsg() != null? nexaExp.getErrorMsg(): nexaExp.toString());
+                mav.setErrorMsg(getExceptionMessage(ex));
             } else {
                 // PlatformException..
                 mav.setErrorCode(NexacroException.DEFAULT_ERROR_CODE);              //Undefined error Code
 //                mav.setErrorMsg(NexacroException.DEFAULT_MESSAGE);         
-                mav.setErrorMsg(ex.toString());         
+                mav.setErrorMsg(getExceptionMessage(ex));         
             }
             
             return mav;
@@ -66,12 +82,34 @@ public class NexcroMappingExceptionResolver extends AbstractHandlerExceptionReso
 
 	private void prepareResolveException(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
 	    
-	    if (this.logger.isDebugEnabled()) {
-            this.logger.debug("Resolving exception from handler [" + handler + "]: " + ex);
-        }
-        
         logException(ex, request);
+        
+        if(this.shouldLogStackTrace) {
+        	logger.error(ex.getMessage(), ex);
+        }
 
 	}
 
+	private String getExceptionMessage(Exception e) {
+		
+		if(this.shouldSendStackTrace) {
+			
+			String message = e.getMessage();
+			
+			if(e instanceof NexacroException) {
+				String errorMsg = ((NexacroException) e).getErrorMsg();
+				if(errorMsg != null) {
+					message = "errorMsg="+ errorMsg +", stackMessage=" +message;
+				}
+			}
+			
+			return message;
+			
+		} else {
+			return this.defaultErrorMsg;
+		}
+		
+	}
+	
+	
 }
