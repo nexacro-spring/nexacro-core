@@ -6,23 +6,12 @@ import javax.servlet.http.HttpServletRequest;
 
 /**
  * 
- * <pre>
  * HTTP Util class
- * </pre>
  * 
- * @ClassName : HttpUtil.java
- * @Description : HTTP Util class
  * @author Park SeongMin
- * @since 2015. 7. 27.
+ * @since 07.27.2015
  * @version 1.0
  * @see
- * @Modification Information
- * 
- *               <pre>
- *     since          author              description
- *  ===========    =============    ===========================
- *  2015. 7. 27.     Park SeongMin     최초 생성
- * </pre>
  */
 public abstract class HttpUtil {
 

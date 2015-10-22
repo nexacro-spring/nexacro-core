@@ -12,22 +12,12 @@ import com.nexacro.xapi.data.DataSet;
 import com.nexacro.xapi.data.Variable;
 
 /**
- * <pre>
- * Statements
- * </pre>
+ * NexacroConverterListener를 처리하기 위한 추상클래스이다.
  *
- * @ClassName   : AbstractNexacroConverter.java
- * @Description : 클래스 설명을 기술합니다.
  * @author Park SeongMin
- * @since 2015. 8. 9.
+ * @since 08.09.2015
  * @version 1.0
  * @see
- * @Modification Information
- * <pre>
- *     since          author              description
- *  ===========    =============    ===========================
- *  2015. 8. 9.     Park SeongMin     최초 생성
- * </pre>
  */
 
 public abstract class AbstractListenerHandler {

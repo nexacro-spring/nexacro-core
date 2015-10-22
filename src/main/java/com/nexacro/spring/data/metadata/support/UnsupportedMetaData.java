@@ -3,22 +3,12 @@ package com.nexacro.spring.data.metadata.support;
 import com.nexacro.spring.data.metadata.NexacroMetaData;
 
 /**
- * <pre>
- * Statements
- * </pre>
+ * <p>{@code NexacroMetaData}의 구현체로 메타데이터 정보가 존재하지 않는다.
  *
- * @ClassName   : UnsupportedMetaData.java
- * @Description : 클래스 설명을 기술합니다.
  * @author Park SeongMin
  * @since 2015. 8. 6.
  * @version 1.0
  * @see
- * @Modification Information
- * <pre>
- *     since          author              description
- *  ===========    =============    ===========================
- *  2015. 8. 6.     Park SeongMin     최초 생성
- * </pre>
  */
 
 public class UnsupportedMetaData extends NexacroMetaData {

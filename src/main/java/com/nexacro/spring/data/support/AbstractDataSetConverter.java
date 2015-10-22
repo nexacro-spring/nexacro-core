@@ -17,24 +17,12 @@ import com.nexacro.xapi.data.datatype.DataType;
 import com.nexacro.xapi.data.datatype.PlatformDataType;
 
 /**
- * <pre>
- * Statements
- * </pre>
- *
- * @ClassName   : AbstractDataSetConverterHandler.java
- * @Description : 클래스 설명을 기술합니다.
+ * <p><code>DataSet</code> 데이터를 POJO 혹은 Map 형태의 데이터로 변환히기 위한 추상 클래스이다. 
  * @author Park SeongMin
- * @since 2015. 8. 11.
+ * @since 08.11.2015
  * @version 1.0
  * @see
- * @Modification Information
- * <pre>
- *     since          author              description
- *  ===========    =============    ===========================
- *  2015. 8. 11.     Park SeongMin     최초 생성
- * </pre>
  */
-
 public class AbstractDataSetConverter extends AbstractListenerHandler {
 
     
@@ -43,10 +31,10 @@ public class AbstractDataSetConverter extends AbstractListenerHandler {
     /***************************************************************************************************/
     
     /**
-     * Statements
+     * Map에 존재하는 데이터를 <code>DataSet</code>의 행으로 추가한다.
      *
      * @param ds
-     * @param obj
+     * @param map
      * @throws NexacroConvertException
      */
     protected void addRowIntoDataSet(DataSet ds, Map map) throws NexacroConvertException {
@@ -79,6 +67,12 @@ public class AbstractDataSetConverter extends AbstractListenerHandler {
         
     }
     
+    /**
+     * bean에 존재하는 데이터를 <code>DataSet</code>의 행으로 추가한다.
+     * 
+     * @param ds
+     * @param obj
+     */
     protected void addRowIntoDataSet(DataSet ds, Object obj) {
         
         if(obj == null) { // ignore null data
@@ -114,6 +108,13 @@ public class AbstractDataSetConverter extends AbstractListenerHandler {
         
     }
     
+    /**
+     * Map의 식별자(key)들을 <code>DataSet</code>의 컬럼으로 추가한다.
+     * <p>단, 식별자에 해당하는 값이 null인 경우 {@link PlatformDataType#UNDEFINED} 타입으로 지정된다.
+     * @param ds
+     * @param map
+     * @throws NexacroConvertException
+     */
     protected void addColumnIntoDataSet(DataSet ds, Map map) throws NexacroConvertException {
         Iterator iterator = map.keySet().iterator();
         while(iterator.hasNext()) {
@@ -139,6 +140,11 @@ public class AbstractDataSetConverter extends AbstractListenerHandler {
         }
     }
     
+    /**
+     * 입력받은 bean의 멤버필드 정보를 토대로 데이터셋의  <code>DataSet</code>의 컬럼으로 추가한다.
+     * @param ds
+     * @param availableFirstData
+     */
     protected void addColumnIntoDataSet(DataSet ds, Object availableFirstData) {
      
         NexacroBeanWrapper beanWrapper = NexacroBeanWrapper.createBeanWrapper(availableFirstData);
@@ -169,6 +175,11 @@ public class AbstractDataSetConverter extends AbstractListenerHandler {
         
     }
     
+    /**
+     * <code>DataSet</code>의 컬럼이름들을 반환한다.
+     * @param ds
+     * @return
+     */
     protected String[] getDataSetColumnNames(DataSet ds) {
         int columnCount = ds.getColumnCount();
         String[] columnNames = new String[columnCount];
@@ -182,7 +193,13 @@ public class AbstractDataSetConverter extends AbstractListenerHandler {
     /***************************************************************************************************/
     /**************************************  DataSet -> Object  ****************************************/
     /***************************************************************************************************/
-    
+    /**
+     * 입력받은 <code>DataSet</code>의 행의 위치(rowIndex)에 해당하는 값을 Map에 저장한다.
+     * @param dataMap
+     * @param ds
+     * @param rowIndex
+     * @param columnNames
+     */
     protected void addRowIntoMap(Map<String, Object> dataMap, DataSet ds, int rowIndex, String[] columnNames) {
         
         int rowType = ds.getRowType(rowIndex);
@@ -216,6 +233,16 @@ public class AbstractDataSetConverter extends AbstractListenerHandler {
         
     }
     
+    /**
+     * 입력받은 <code>DataSet</code>의 행의 위치(rowIndex)에 해당하는 값을 bean에 저장한다.
+     * <p>원본데이터와 행의 타입도 저장된다.
+     * @param beanWrapper
+     * @param ds
+     * @param rowIndex
+     * @throws NexacroConvertException
+     * @see DataSetRowTypeAccessor
+     * @see DataSetSavedDataAccessor
+     */
     protected void addRowAndOrgRowIntoBean(NexacroBeanWrapper beanWrapper, DataSet ds, int rowIndex) throws NexacroConvertException {
         
         boolean isSavedData = false;
@@ -238,6 +265,16 @@ public class AbstractDataSetConverter extends AbstractListenerHandler {
         
     }
     
+    /**
+     * 입력받은 <code>DataSet</code>의 행의 위치(rowIndex)에 해당하는 값을 bean에 저장한다.
+     * <p>행의 타입(rowType)이 저장된다.
+     * @param beanWrapper
+     * @param ds
+     * @param rowIndex
+     * @param isSavedData
+     * @param isRemovedData
+     * @throws NexacroConvertException
+     */
     protected void addRowIntoBean(NexacroBeanWrapper beanWrapper,
             DataSet ds, int rowIndex, boolean isSavedData, boolean isRemovedData) throws NexacroConvertException {
         

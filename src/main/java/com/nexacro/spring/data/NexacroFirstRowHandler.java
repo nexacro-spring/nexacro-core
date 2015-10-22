@@ -22,23 +22,13 @@ import com.nexacro.xapi.tx.PlatformRequest;
 import com.nexacro.xapi.tx.PlatformType;
 
 /**
- * <pre>
- * Nexacro Platform에서 지원하는 FirstRow를 처리 한다.
+ * 데이터 분할 전송을 위해 사용되는 <code>HttpPartPlatformResponse<code>를 이용하여 데이터를 전송한다.
  * 데이터의 전송은 <Code>Variable</Code> 부터 <Code>DataSet</Code> 순으로 전송 된다.
- * </pre>
  * 
- * @ClassName : NexacroFirstRowHandler.java
  * @author Park SeongMin
- * @since 2015. 8. 5.
+ * @since 08.05.2015
  * @version 1.0
  * @see
- * @Modification Information
- * 
- *               <pre>
- *     since          author              description
- *  ===========    =============    ===========================
- *  2015. 8. 5.     Park SeongMin     최초 생성
- * </pre>
  */
 
 public class NexacroFirstRowHandler {

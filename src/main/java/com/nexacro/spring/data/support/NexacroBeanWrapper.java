@@ -23,26 +23,23 @@ import com.nexacro.spring.util.ReflectionFailException;
 import com.nexacro.spring.util.ReflectionUtil;
 
 /**
- * <pre>
- * Statements
- * </pre>
+ * <p>Java Beans 의 구조를 변경하기 위한 Wrapper class
  *
- * @ClassName   : NexacroBeanWrapper.java
- * @Description : 클래스 설명을 기술합니다.
  * @author Park SeongMin
- * @since 2015. 8. 4.
+ * @since 08.04.2015
  * @version 1.0
- * @see
- * @Modification Information
- * <pre>
- *     since          author              description
- *  ===========    =============    ===========================
- *  2015. 8. 4.     Park SeongMin     최초 생성
- * </pre>
+ * @see BeanWrapper
  */
-
 public class NexacroBeanWrapper {
 
+/*
+	내부적으로 Java의 Introspection 를 통해 MemberField의 정보를 알아내고 값을 설정한다.
+	Java의 PropertyDescriptor의 경우 Method 명칭은 MemberField의 명칭으로 get | set 으로 정의된다. 하지만 boolean의 경우 is가 생략되기 때문에 별도로 처리해야 한다. 
+	Member Field에 값 할당 시 Spring에서 데이터 변경에대한 Event 처리, 데이터 Type 처리 등의 처리로 속도가 현저히 떨어지기 때문에 값을 설정할 경우에는 reflection을 이용하여 바로 설정하도록 한다.
+	Member Field 의 readMethod (getter)가 static일 경우 Spring에서 Method를 찾을수 없는 상태가 된다. Read method가 null 일 경우 static method를 찾아서 설정해야 한다.
+
+*/
+	
 /* 
   BeanWrapper의 경우 Method 명칭에 해당하는 property 명칭으로 값을 설정한다.
     하지만 field가 boolean일 경우 eclipseis에서 generation 되는 메서드의 명칭은 is가 생략되기 때문에 
@@ -98,6 +95,12 @@ public class NexacroBeanWrapper {
 //        }
     }
     
+    /**
+     * 입력받은 명칭(propertyName)에 해당하는 멤버필드에 값(value)를 설정한다.
+     * 
+     * @param propertyName
+     * @param value
+     */
     public void setPropertyValue(String propertyName, Object value) {
         NexacroBeanProperty property = getCachedBeanMappings().getProperty(propertyName);
         if(property == null ) {
@@ -121,6 +124,11 @@ public class NexacroBeanWrapper {
         
     }
 
+    /**
+     * 입력받은 명칭(propertyName)에 해당하는 멤버필드에 값(value)를 반환한다.
+     * @param propertyName
+     * @return value
+     */
     public Object getPropertyValue(String propertyName) {
         NexacroBeanProperty property = getCachedBeanMappings().getProperty(propertyName);
         if(property == null) {
@@ -129,6 +137,10 @@ public class NexacroBeanWrapper {
         return getPropertyValue(property);
     }
     
+    /**
+     * 현재 설정 된 class의 object instance를 반환한다.
+     * @return object instance
+     */
     public Object getInsatance() {
         return beanWrapper.getWrappedInstance();
     }
@@ -142,14 +154,29 @@ public class NexacroBeanWrapper {
         return cachedMapping;
     }
     
+    /**
+     * 입력받은 Object를 통해 {@code NexacroBeanWrapper}를 생성한다.
+     * @param clazz
+     * @return wrapped class
+     */
     public static NexacroBeanWrapper createBeanWrapper(Object obj) {
         return new NexacroBeanWrapper(obj);
     }
     
+    /**
+     * 입력받은 class를 통해 {@code NexacroBeanWrapper}를 생성한다.
+     * @param clazz
+     * @return wrapped class
+     */
     public static NexacroBeanWrapper createBeanWrapper(Class<?> clazz) {
         return new NexacroBeanWrapper(clazz);
     }
     
+    /**
+     * <p>Beans의 Property 중 nexacro에서 처리가능한 Field에 대한 정보를 cache 하는 class이다
+     * @author Park SeongMin
+     *
+     */
     private static class CachedBeanMappings {
         
         private static Logger logger = LoggerFactory.getLogger(NexacroBeanWrapper.class);
@@ -235,6 +262,10 @@ public class NexacroBeanWrapper {
             beanProperties = tmpList.toArray(beanProperties);
         }
         
+        /**
+         * Bean의 Property 중 nexacro platform에서 처리 가능한 필드 정보만을 반환한다.
+         * @return
+         */
         public NexacroBeanProperty[] getProperties() {
             return beanProperties;
         }

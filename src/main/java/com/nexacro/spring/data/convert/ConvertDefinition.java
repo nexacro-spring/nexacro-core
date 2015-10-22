@@ -2,23 +2,13 @@ package com.nexacro.spring.data.convert;
 
 
 /**
- * <pre>
- * Statements
- * </pre>
+ * <p>데이터 변환에 대한 정보를 저장한다.
+ * <p>DataSet 혹은 Variable의 명칭을 가지며, List 형식의 데이터 변환시  Generic Type 정보를 가진다. 
  * 
- * @ClassName : NexacroConvertDefinition.java
- * @Description : 클래스 설명을 기술합니다.
  * @author Park SeongMin
- * @since 2015. 7. 28.
+ * @since 07.28.2015
  * @version 1.0
  * @see
- * @Modification Information
- * 
- *               <pre>
- *     since          author              description
- *  ===========    =============    ===========================
- *  2015. 7. 28.     Park SeongMin     최초 생성
- * </pre>
  */
 
 public class ConvertDefinition {

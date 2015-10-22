@@ -2,23 +2,12 @@ package com.nexacro.spring.data.convert;
 
 
 /**
- * <pre>
- * Statements
- * </pre>
+ * <code>PlatformData</code>(<code>DataSet</code>|<code>Variable</code>)의 데이터 변환을 위한 인터페이스이다.
  * 
- * @ClassName : NexacroConverter.java
- * @Description : 클래스 설명을 기술합니다.
  * @author Park SeongMin
- * @since 2015. 7. 28.
+ * @since 07.28.2015
  * @version 1.0
  * @see
- * @Modification Information
- * 
- *               <pre>
- *     since          author              description
- *  ===========    =============    ===========================
- *  2015. 7. 28.     Park SeongMin     최초 생성
- * </pre>
  */
 
 public interface NexacroConverter<S, T> {
@@ -33,10 +22,26 @@ public interface NexacroConverter<S, T> {
      */
     T convert(S source, ConvertDefinition definition) throws NexacroConvertException;
     
+    /**
+     * source에서 target으로 데이터 변환 가능여부를 반환한다.
+     * @param source 대상 객체
+     * @param target 변환되는 객체
+     * @return can convertiable
+     */
     boolean canConvert(Class source, Class target);
     
+    /**
+     * {@code NexacroConvertListener}를 등록한다.
+     * @param listener
+     * @see #removeListener(NexacroConvertListener)
+     */
     void addListener(NexacroConvertListener listener);
     
+    /**
+     * {@code NexacroConvertListener}를 제거한다.
+     * @param listener
+     * @see #addListener(NexacroConvertListener)
+     */
     void removeListener(NexacroConvertListener listener);
     
     public static final class ConvertiblePair {

@@ -21,24 +21,13 @@ import com.nexacro.xapi.data.datatype.DataTypeFactory;
 import com.nexacro.xapi.data.datatype.PlatformDataType;
 
 /**
- * <pre>
- * Statements
- * </pre>
+ * <p>DataSet혹은 Variable의 데이터 변환을 위한 helper class
  *
- * @ClassName   : VariableConverterHelper.java
- * @Description : 클래스 설명을 기술합니다.
  * @author Park SeongMin
  * @since 2015. 7. 28.
  * @version 1.0
  * @see
- * @Modification Information
- * <pre>
- *     since          author              description
- *  ===========    =============    ===========================
- *  2015. 7. 28.     Park SeongMin     최초 생성
- * </pre>
  */
-
 public abstract class NexacroConverterHelper {
 
     private static final Set<ConvertiblePair> listToDataSetConvertibleSets = Collections.singleton(new ConvertiblePair(List.class, DataSet.class));

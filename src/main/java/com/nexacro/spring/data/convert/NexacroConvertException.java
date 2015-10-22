@@ -3,22 +3,12 @@ package com.nexacro.spring.data.convert;
 import com.nexacro.spring.NexacroException;
 
 /**
- * <pre>
- * Statements
- * </pre>
+ * <p>{@code NexacroConverter}에서 데이터 변환시 발생하는 예외이다.
  *
- * @ClassName   : NexacroConvertException.java
- * @Description : 클래스 설명을 기술합니다.
  * @author Park SeongMin
  * @since 2015. 7. 28.
  * @version 1.0
  * @see
- * @Modification Information
- * <pre>
- *     since          author              description
- *  ===========    =============    ===========================
- *  2015. 7. 28.     Park SeongMin     최초 생성
- * </pre>
  */
 
 public class NexacroConvertException extends NexacroException {

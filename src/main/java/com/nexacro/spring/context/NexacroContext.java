@@ -16,23 +16,13 @@ import com.nexacro.xapi.tx.PlatformType;
 import com.nexacro.xapi.util.StringUtils;
 
 /**
- * 
- * <pre>
- * cache 데이터
- * </pre>
+ * <p>HTTP 요청으로 부터 데이터를 수신받으며, 수신 된 데이터를 저장한다.
+ * <p>또한 데이터 분할 전송을 위한 NexacroFirstRowHandler를 제공한다.
  *
- * @ClassName   : NexacroCachedData.java
- * @Description : cache 데이터
  * @author Park SeongMin
- * @since 2015. 7. 28.
+ * @since 07.28.2015
  * @version 1.0
- * @see
- * @Modification Information
- * <pre>
- *     since          author              description
- *  ===========    =============    ===========================
- *  2015. 7. 28.     Park SeongMin     최초 생성
- * </pre>
+ * @see NexacroContextHolder
  */
 public class NexacroContext {
     

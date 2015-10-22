@@ -1,24 +1,12 @@
 package com.nexacro.spring;
 
 /**
+ * <p>상수 데이터
  * 
- * <pre>
- * Statements
- * </pre>
- * 
- * @ClassName : NexacroConstants.java
- * @Description : 클래스 설명을 기술합니다.
  * @author Park SeongMin
- * @since 2015. 8. 5.
+ * @since 08.05.2015
  * @version 1.0
  * @see
- * @Modification Information
- * 
- *               <pre>
- *     since          author              description
- *  ===========    =============    ===========================
- *  2015. 8. 5.     Park SeongMin     최초 생성
- * </pre>
  */
 public final class NexacroConstants {
 

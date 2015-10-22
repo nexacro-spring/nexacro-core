@@ -8,24 +8,13 @@ import com.nexacro.spring.data.convert.NexacroConverter;
 import com.nexacro.xapi.data.Variable;
 
 /**
- * <pre>
- * Statements
- * </pre>
+ * <p><code>Variable</code>에서 Object로 데이터로 변환을 수행한다. 
  *
- * @ClassName   : VariableToObjectConverter.java
- * @Description : 클래스 설명을 기술합니다.
  * @author Park SeongMin
- * @since 2015. 7. 28.
+ * @since 07.28.2015
  * @version 1.0
  * @see
- * @Modification Information
- * <pre>
- *     since          author              description
- *  ===========    =============    ===========================
- *  2015. 7. 28.     Park SeongMin     최초 생성
- * </pre>
  */
-
 public class VariableToObjectConverter extends AbstractListenerHandler implements NexacroConverter<Variable, Object> {
 
     @Override

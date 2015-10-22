@@ -1,20 +1,19 @@
 package com.nexacro.spring;
 
+import com.nexacro.spring.resolve.NexacroMappingExceptionResolver;
+
 /**
  * 
- * <p>Nexacro 예외를 의미하는 <code>Exception</code>이다.
- * 추가적으로 설정되는 에러코드(errorCode) 에러메시지(errorMsg)는 nexacro platform으로 전송되는 데이터이다.
+ * nexacro 예외를 의미하는 <code>Exception</code>이다.
+ * 
+ * <p>nexacro platform으로 전송가능한 에러코드와 에러메시지를 저장한다.
+ * 
+ * <p><code>NexacroMappingExceptionResolver</code> 설정에 따라 전송되는 에러 메시지 정보는 달라진다.
  *
  * @author Park SeongMin
  * @since 2015. 7. 30.
  * @version 1.0
- * @see
- * @Modification Information
- * <pre>
- *     since          author              description
- *  ===========    =============    ===========================
- *  2015. 7. 30.     Park SeongMin     최초 생성
- * </pre>
+ * @see NexacroMappingExceptionResolver
  */
 public class NexacroException extends Exception {
 

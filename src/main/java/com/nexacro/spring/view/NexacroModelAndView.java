@@ -8,6 +8,16 @@ import com.nexacro.xapi.data.DataSet;
 import com.nexacro.xapi.data.PlatformData;
 import com.nexacro.xapi.data.Variable;
 
+/**
+ * <p>nexacro platform으로 데이터를 송신하기 위한 {@link org.springframework.web.servlet.ModelAndView}이다.
+ * 
+ * <p>기본 적인 <code>PlatformData</code>외 에러코드와 에러메시지 정보를 가진다.
+ * 
+ * @author Park SeongMin
+ * @since 07.27.2015
+ * @version 1.0
+ *
+ */
 public class NexacroModelAndView extends ModelAndView {
 	
 	private PlatformData platformData = new PlatformData();

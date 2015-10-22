@@ -11,23 +11,13 @@ import com.nexacro.xapi.data.PlatformData;
 import com.nexacro.xapi.data.Variable;
 
 /**
- * <pre>
- * nexacro platform으로 데이터를 송신하기 위한 정보를 가진다.
- * 데이터 삽입 시 변환은 이루어지지 않으며, NexacroHandlerMethodReturnValueHandler에서 데이터 변환이 이루어진다.
- * </pre>
+ * <p>DataSet혹은 Variable 형식의 데이터로 송신하기 위한 정보를 가진다.
+ * <p>데이터 삽입 시 변환은 이루어지지 않으며, NexacroHandlerMethodReturnValueHandler에서 데이터 변환이 이루어진다.
  *
- * @ClassName   : NexacroResult.java
- * @Description : 클래스 설명을 기술합니다.
  * @author Park SeongMin
- * @since 2015. 7. 27.
+ * @since 07.27.2015
  * @version 1.0
  * @see NexacroHandlerMethodReturnValueHandler
- * @Modification Information
- * <pre>
- *     since          author              description
- *  ===========    =============    ===========================
- *  2015. 7. 27.     Park SeongMin     최초 생성
- * </pre>
  */
 public class NexacroResult {
 

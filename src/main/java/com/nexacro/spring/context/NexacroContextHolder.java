@@ -10,21 +10,13 @@ import com.nexacro.spring.NexacroConstants;
 import com.nexacro.xapi.tx.PlatformException;
 
 /**
- * <pre>
- * 현재 Thread 단위의 Web 요청에 대한 Nexacro Platform 데이터를 가진다. 
- * </pre>
+ * <p>HTTP 요청에 대한  <code>NexacroContext</code>를 Thread 단위로 관리한다. 
  *
  * @ClassName   : NexacroContextHolder.java
  * @author Park SeongMin
- * @since 2015. 8. 11.
+ * @since 08.11.2015
  * @version 1.0
- * @see
- * @Modification Information
- * <pre>
- *     since          author              description
- *  ===========    =============    ===========================
- *  2015. 8. 11.     Park SeongMin     최초 생성
- * </pre>
+ * @see NexacroContext
  */
 
 public abstract class NexacroContextHolder {

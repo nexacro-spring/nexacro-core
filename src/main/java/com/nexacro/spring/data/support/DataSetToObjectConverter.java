@@ -10,24 +10,13 @@ import com.nexacro.spring.util.ReflectionUtil;
 import com.nexacro.xapi.data.DataSet;
 
 /**
- * <pre>
- * Statements
- * </pre>
+ * <p><code>DataSet</code>에서 Object 형태의 데이터로 변환을 수행한다.
  *
- * @ClassName   : DataSetToObjectConverter.java
- * @Description : 클래스 설명을 기술합니다.
  * @author Park SeongMin
- * @since 2015. 8. 17.
+ * @since 08.17.2015
  * @version 1.0
  * @see
- * @Modification Information
- * <pre>
- *     since          author              description
- *  ===========    =============    ===========================
- *  2015. 8. 17.     Park SeongMin     최초 생성
- * </pre>
  */
-
 public class DataSetToObjectConverter extends AbstractDataSetConverter implements NexacroConverter<DataSet, Object> {
 
     @Override

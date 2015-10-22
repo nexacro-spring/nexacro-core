@@ -15,25 +15,13 @@ import com.nexacro.spring.data.support.ObjectToVariableConverter;
 import com.nexacro.spring.data.support.VariableToObjectConverter;
 
 /**
- * <pre>
- * Statements
- * </pre>
+ * <p>{@code NexacroConverter}를 등록하고 관리하는 Factory 클래스이다. 제공되는 {@code NexacroConverter}는 singleton 형식으로 관리된다.
  * 
- * @ClassName : NexacroConverterFactory.java
- * @Description : 클래스 설명을 기술합니다.
  * @author Park SeongMin
- * @since 2015. 7. 28.
+ * @since 07.28.2015
  * @version 1.0
- * @see
- * @Modification Information
- * 
- *               <pre>
- *     since          author              description
- *  ===========    =============    ===========================
- *  2015. 7. 28.     Park SeongMin     최초 생성
- * </pre>
+ * @see NexacroConverter
  */
-
 public class NexacroConverterFactory {
 
     private static Logger logger = LoggerFactory.getLogger(NexacroConverterFactory.class);
@@ -59,6 +47,13 @@ public class NexacroConverterFactory {
         return INSTANCE;
     }
     
+    /**
+     * <p>소스(source)에서 대상(target)으로 데이터 변환이 가능한 {@link NexacroConverter}를 반환한다.
+     * <p>단, 변환 가능한 {@link NexacroConverter}가 존재하지 않을 경우 null을 반환한다.
+     * @param source
+     * @param target
+     * @return nexacroConverter
+     */
     public static NexacroConverter getConverter(Class source, Class target) {
         
         if(source == null || target == null) {
@@ -98,7 +93,6 @@ public class NexacroConverterFactory {
         
         return null;
     }
-    
     
     public static synchronized void register(Set<NexacroConverter> converters) {
         if(converters == null) {

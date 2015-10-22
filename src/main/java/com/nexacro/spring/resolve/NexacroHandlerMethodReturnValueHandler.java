@@ -29,29 +29,37 @@ import com.nexacro.xapi.data.Variable;
 
 /**
  * <pre>
- * Controller에서 반환되는 데이터를 nexacro platform 데이터 형식으로 데이터 변환을 수행한다.
+ * 요청에 대한 응답 데이터를 nexacro platform 데이터 형식으로 데이터 변환을 수행한다.
  * 
- * 지원하는 형식은 다음과 같다.
- * 
- * <li>NexacroResult</li>
- * <li>NexacroFileResult</li>
- * <li>PlatformData</li>
- * </pre>
+ * <p>정의된 형식은 다음과 같다.
+ * <blockquote>
+ *    <table border="thin">
+ *        <tr class="TableSubHeadingColor">
+ *            <th>class</th>
+ *            <th>description</th>
+ *        </tr>
+ *        <tr class="TableRowColor">
+ *            <td>NexacroResult</td>
+ *            <td>DataSet 혹은 Varible로 데이터를 송신하기 위한 정보를 가진다.</td>
+ *        </tr>
+ *        <tr class="TableRowColor">
+ *            <td>NexacroFileResult</td>
+ *            <td>파일 데이터를 송신하기 위한 정보를 가진다.</td>
+ *        </tr>
+ *        <tr class="TableRowColor">
+ *            <td>PlatformData</td>
+ *            <td>nexacro platform의 데이터 통신의 기본 단위이다.</td>
+ *        </tr>
+ *    </table>
+ * </blockquote>
  *
- * @ClassName   : NexacroHandlerMethodReturnValueHandler.java
- * @Description : 클래스 설명을 기술합니다.
  * @author Park SeongMin
- * @since 2015. 7. 27.
+ * @since 07.27.2015
  * @version 1.0
- * @see
- * @Modification Information
- * <pre>
- *     since          author              description
- *  ===========    =============    ===========================
- *  2015. 7. 27.     Park SeongMin     최초 생성
- * </pre>
+ * @see NexacroResult
+ * @see NexacroFileResule
+ * @see PlatformData
  */
-
 public class NexacroHandlerMethodReturnValueHandler implements HandlerMethodReturnValueHandler {
 
     private Logger logger = LoggerFactory.getLogger(NexacroHandlerMethodReturnValueHandler.class);

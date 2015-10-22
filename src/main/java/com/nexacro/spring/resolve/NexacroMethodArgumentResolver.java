@@ -42,27 +42,64 @@ import com.nexacro.xapi.tx.PlatformException;
 
 /**
  * 
- * <pre>
- * Nexacro platform을 위한 <code>HandlerMethodArgumentResolver</code>이다.
+ * <p>요청에 대한 메서드 파라매터(<code>PlatformData</code>) 데이터 변환을 위한 {@link HandlerMethodArgumentResolver}이다.
+ *
+ * <p>정의된 형식은 다음과 같다.
+ * <blockquote>
+ *    <table border="thin">
+ *        <tr class="TableSubHeadingColor">
+ *            <th>class</th>
+ *            <th>description</th>
+ *        </tr>
+ *        <tr class="TableRowColor">
+ *            <td>List&lt;?&gt; list</td>
+ *            <td>DataSet을 List로 형식으로 변환한다. @ParamDataSet과 사용한다.</td>
+ *        </tr>
+ *        <tr class="TableRowColor">
+ *            <td>Primitive Types</td>
+ *            <td>Variable을 Primitive 형식으로 변환한다. @ParamVariable과 사용한다.</td>
+ *        </tr>
+ *        <tr class="TableRowColor">
+ *            <td>PlatformData</td>
+ *            <td>nexacro platform의 데이터 통신의 기본 단위이다.</td>
+ *        </tr>
+ *        <tr class="TableRowColor">
+ *            <td>DataSetList</td>
+ *            <td>DataSet들의 저장하는 DataSetList이다.</td>
+ *        </tr>
+ *        <tr class="TableRowColor">
+ *            <td>VariableList</td>
+ *            <td>Variable들을 저장하는 VariableList이다.</td>
+ *        </tr>
+ *        <tr class="TableRowColor">
+ *            <td>DataSet</td>
+ *            <td>2차원 형태의 데이터 구조인 DataSet이다. @ParamDataSet과 사용한다.</td>
+ *        </tr>
+ *        <tr class="TableRowColor">
+ *            <td>Variable</td>
+ *            <td>식별자와 값으로 구성 된 데이터 구조인 Variable이다. @ParamVariable과 사용한다.</td>
+ *        </tr>
+ *        <tr class="TableRowColor">
+ *            <td>HttpPlatformRequest</td>
+ *            <td>HTTP 요청으로 데이터를 수신 받는다. </td>
+ *        </tr>
+ *        <tr class="TableRowColor">
+ *            <td>HttpPlatformResponse</td>
+ *            <td>HTTP 응답으로 데이터를 송신한다. </td>
+ *        </tr>
+ *        <tr class="TableRowColor">
+ *            <td>NexacroFirstRowHandler</td>
+ *            <td>데이터 분한 전송을 하기 위한 Handler이다.</td>
+ *        </tr>
+ *    </table>
+ * </blockquote>
  * 
- * 지원하는 형식은 다음과 같다.
- * 
- * ...
- * 
- * </pre>
- * 
- * @ClassName : NexacroMethodArgumnetResolver.java
  * @author Park SeongMin
- * @since 2015. 7. 27.
+ * @since 07.27.2015
  * @version 1.0
  * @see NexacroHandlerMethodReturnValueHandler
- * @Modification Information
- * 
- * <pre>
- *     since          author              description
- *  ===========    =============    ===========================
- *  2015. 7. 27.     Park SeongMin     최초 생성
- * </pre>
+ * @see NexacroFirstRowHandler
+ * @see PlatformData
  */
 public class NexacroMethodArgumentResolver implements HandlerMethodArgumentResolver {
 

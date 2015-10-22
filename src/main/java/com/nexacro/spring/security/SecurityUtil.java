@@ -10,23 +10,12 @@ import com.nexacro.xapi.data.Variable;
 import com.nexacro.xapi.data.VariableList;
 
 /**
- * <pre>
- * Statements
- * </pre>
+ * <p>
  * 
- * @ClassName : SecurityUtil.java
- * @Description : 클래스 설명을 기술합니다.
  * @author Park SeongMin
  * @since 2015. 8. 11.
  * @version 1.0
  * @see
- * @Modification Information
- * 
- *               <pre>
- *     since          author              description
- *  ===========    =============    ===========================
- *  2015. 8. 11.     Park SeongMin     최초 생성
- * </pre>
  */
 @Deprecated
 public abstract class SecurityUtil {

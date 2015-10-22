@@ -3,25 +3,18 @@ package com.nexacro.spring.data;
 import java.io.File;
 
 import com.nexacro.spring.resolve.NexacroHandlerMethodReturnValueHandler;
+import com.nexacro.spring.view.NexacroFileView;
 
 /**
  * <pre>
- * nexacro platform으로 File 데이터를 전송하기 위한 정보를 가진다.
+ * nexacro platform으로  파일 데이터를 전송하기 위한 정보를 가진다.
  * </pre>
  * 
- * @ClassName : NexacroFileResult.java
- * @Description : 클래스 설명을 기술합니다.
  * @author Park SeongMin
- * @since 2015. 8. 18.
+ * @since 08.18.2015
  * @version 1.0
+ * @see NexacroFileView
  * @see NexacroHandlerMethodReturnValueHandler
- * @Modification Information
- * 
- *               <pre>
- *     since          author              description
- *  ===========    =============    ===========================
- *  2015. 8. 18.     Park SeongMin     최초 생성
- * </pre>
  */
 
 public class NexacroFileResult {

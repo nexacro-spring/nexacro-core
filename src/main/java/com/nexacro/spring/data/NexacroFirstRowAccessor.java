@@ -4,22 +4,12 @@ import com.nexacro.xapi.tx.HttpPartPlatformResponse;
 import com.nexacro.xapi.tx.PlatformException;
 
 /**
- * <pre>
- * Statements
- * </pre>
+ * <p>NexacroFirstRowHandler에 접근 가능한 메서드를 제공한다.
  *
- * @ClassName   : NexacroFirstRowAccessor.java
- * @Description : 클래스 설명을 기술합니다.
  * @author Park SeongMin
- * @since 2015. 8. 5.
+ * @since 08.05.2015
  * @version 1.0
- * @see
- * @Modification Information
- * <pre>
- *     since          author              description
- *  ===========    =============    ===========================
- *  2015. 8. 5.     Park SeongMin     최초 생성
- * </pre>
+ * @see NexacroFirstRowHandler
  */
 
 public abstract class NexacroFirstRowAccessor {

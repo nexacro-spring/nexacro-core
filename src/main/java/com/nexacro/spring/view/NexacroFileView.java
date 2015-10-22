@@ -21,6 +21,16 @@ import com.nexacro.xapi.data.PlatformData;
 import com.nexacro.xapi.data.Variable;
 import com.nexacro.xapi.tx.PlatformException;
 
+/**
+ * <p>nexacro platform으로 파일 데이터를 송신하기 위한 {@link org.springframework.web.servlet.View}이다.
+ * 
+ * <p>파일데이터 전송 시 사용되는 MIME TYPE의 경우 {@link javax.activation.MimetypesFileTypeMap}을 이용하여 처리된다.
+ * 
+ * @author Park SeongMin
+ * @since 07.27.2015
+ * @version 1.0
+ *
+ */
 public class NexacroFileView extends NexacroView {
 
 	public  NexacroFileView() {

@@ -26,6 +26,17 @@ import com.nexacro.xapi.tx.HttpPlatformResponse;
 import com.nexacro.xapi.tx.PlatformException;
 import com.nexacro.xapi.tx.PlatformType;
 
+/**
+ * <p>nexacro platform으로 데이터를 송신하기 위한 {@link org.springframework.web.servlet.View}이다.
+ * 
+ * <p>데이터 분한 전송이 이루어진 후 데이터를 전송하는 경우 기 전송된 데이터는 전송되지 않는다.
+ * 또한 DataSet이 전송되었을 경우 Variable은 추가적으로 전송되지 않는다.
+ * 
+ * @author Park SeongMin
+ * @since 07.27.2015
+ * @version 1.0
+ *
+ */
 public class NexacroView extends AbstractView {
     
 	private Logger logger = LoggerFactory.getLogger(NexacroView.class);
@@ -45,6 +56,14 @@ public class NexacroView extends AbstractView {
         }
     }
 
+    /**
+     * <p>데이터 전송시 사용되는 기본 ContentType을 설정한다.
+     * 
+     * @param defaultContentType
+     * @see PlatformType#CONTENT_TYPE_XML
+     * @see PlatformType#CONTENT_TYPE_SSV
+     * @see PlatformType#CONTENT_TYPE_BIN
+     */
     public void setDefaultContentType(String defaultContentType) {
         this.defaultContentType = defaultContentType;
     }
@@ -57,6 +76,10 @@ public class NexacroView extends AbstractView {
         }
     }
 
+    /**
+     * <p>데이터 전송 시 사용되는 기본 charset을 설정한다.
+     * @param defaultCharset
+     */
     public void setDefaultCharset(String defaultCharset) {
         this.defaultCharset = defaultCharset;
     }

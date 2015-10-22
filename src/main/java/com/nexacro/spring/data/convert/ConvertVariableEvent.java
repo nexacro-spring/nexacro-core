@@ -3,24 +3,13 @@ package com.nexacro.spring.data.convert;
 import com.nexacro.xapi.data.Variable;
 
 /**
- * <pre>
- * Statements
- * </pre>
- *
- * @ClassName   : ConvertVariableEvent.java
- * @Description : 클래스 설명을 기술합니다.
+ * <p>Variable의 데이터 변환 시  처리되는 EventObject이다.
+ * 
  * @author Park SeongMin
- * @since 2015. 8. 9.
+ * @since 08.09.2015
  * @version 1.0
  * @see
- * @Modification Information
- * <pre>
- *     since          author              description
- *  ===========    =============    ===========================
- *  2015. 8. 9.     Park SeongMin     최초 생성
- * </pre>
  */
-
 public class ConvertVariableEvent extends ConvertEvent {
 
     /* serialVersionUID */

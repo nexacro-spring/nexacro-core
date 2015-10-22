@@ -3,22 +3,13 @@ package com.nexacro.spring.data.convert;
 import java.util.EventObject;
 
 /**
- * <pre>
- * Statements
- * </pre>
+ * <p>{@link NexacroConverter#convert(Object, ConvertDefinition)}에서 데이터 변환 시 
+ * <code>DataSet</code>의 행의 값 변환 혹은 <code>Variable</code>의 값 변환 시 처리되는 EventObject이다.
  *
- * @ClassName   : ConvertEvent.java
- * @Description : 클래스 설명을 기술합니다.
  * @author Park SeongMin
- * @since 2015. 8. 9.
+ * @since 08.09.2015
  * @version 1.0
  * @see
- * @Modification Information
- * <pre>
- *     since          author              description
- *  ===========    =============    ===========================
- *  2015. 8. 9.     Park SeongMin     최초 생성
- * </pre>
  */
 
 public class ConvertEvent extends EventObject {
@@ -40,6 +31,7 @@ public class ConvertEvent extends EventObject {
     }
 
     /**
+     * 데이터 변환이 이루어지는  현재 값을 반환한다.
      * @return the convertedValue
      */
     public Object getValue() {
@@ -47,6 +39,7 @@ public class ConvertEvent extends EventObject {
     }
 
     /**
+     * 데이터 변환이 이루어지는 값을 변경한다.
      * @param value the value to set
      */
     public void setValue(Object value) {
