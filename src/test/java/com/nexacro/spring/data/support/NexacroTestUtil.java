@@ -21,25 +21,12 @@ import com.nexacro.xapi.data.datatype.DataType;
 import com.nexacro.xapi.data.datatype.PlatformDataType;
 
 /**
- * <pre>
- * Statements
- * </pre>
  * 
- * @ClassName : TestDataUtil.java
- * @Description : 클래스 설명을 기술합니다.
  * @author Park SeongMin
- * @since 2015. 8. 10.
+ * @since 08.10.2015
  * @version 1.0
  * @see
- * @Modification Information
- * 
- *               <pre>
- *     since          author              description
- *  ===========    =============    ===========================
- *  2015. 8. 10.     Park SeongMin     최초 생성
- * </pre>
  */
-
 public abstract class NexacroTestUtil {
 
     private static String[] dsPropertyNames;
