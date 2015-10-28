@@ -6,6 +6,9 @@ import java.io.InputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.nexacro.spring.data.NexacroFirstRowHandler;
 import com.nexacro.spring.util.CharsetUtil;
 import com.nexacro.xapi.data.PlatformData;
@@ -66,7 +69,16 @@ public class NexacroContext {
         if(PlatformType.HTTP_CONTENT_TYPE_BINARY.equals(httpContentType)) {
             httpPlatformRequest.setContentType(contentType);
         }
-        httpPlatformRequest.receiveData();
+        
+        try {
+        	httpPlatformRequest.receiveData();
+        } catch(PlatformException e) {
+        	// ExceptionResolver에서 상세한 로그를 남긴다. 간략로그만을 남기도록 한다.
+        	Logger logger = LoggerFactory.getLogger(getClass());
+        	logger.error("receive platform data failed. e="+e.getMessage());
+        	throw e;
+        }
+        
         // SSV 일 경우에만 contentType 존재. 그 외 처리를 위해 설정.
         if(httpPlatformRequest.getContentType() == null) {
             httpPlatformRequest.setContentType(contentType);

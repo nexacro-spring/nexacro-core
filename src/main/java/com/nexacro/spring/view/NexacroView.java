@@ -88,14 +88,22 @@ public class NexacroView extends AbstractView {
 	protected void renderMergedOutputModel(Map<String, Object> model,
 			HttpServletRequest request, HttpServletResponse response) throws Exception {
 		
-	    Object object = model.get(NexacroConstants.ATTRIBUTE.NEXACRO_PLATFORM_DATA);
-	    if(object == null || !(object instanceof PlatformData)) {
-	        sendResponse(request, response);
-	        return;
-	    }
-	    
-		sendResponse(request, response, (PlatformData) object);
-		
+    	try {
+		    Object object = model.get(NexacroConstants.ATTRIBUTE.NEXACRO_PLATFORM_DATA);
+		    if(object == null || !(object instanceof PlatformData)) {
+		        sendResponse(request, response);
+		        return;
+		    }
+			sendResponse(request, response, (PlatformData) object);
+    	} catch(Throwable e) {
+         	// ExceptionResolver가 처리되지 않기 때문에 로그를 남기도록 한다.
+         	logger.error("an error has occurred during platform data transfer", e);
+         	if(e instanceof Exception) {
+         		throw (Exception) e;
+         	} else {
+         		throw new PlatformException("an error has occurred during platform data transfer", e);
+         	}
+    	}
 	}
 		
     protected void sendResponse(HttpServletRequest request, HttpServletResponse response) throws PlatformException{
@@ -112,7 +120,6 @@ public class NexacroView extends AbstractView {
         sw.start("rendering platformdata");
         
         try {
-            
             if(cachedData != null) {
                 if(cachedData.isFirstRowFired()) {
                     NexacroFirstRowHandler firstRowHandler = cachedData.getFirstRowHandler();

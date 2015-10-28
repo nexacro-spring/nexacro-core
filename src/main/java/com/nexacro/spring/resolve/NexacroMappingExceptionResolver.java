@@ -88,10 +88,10 @@ public class NexacroMappingExceptionResolver extends AbstractHandlerExceptionRes
     
 	protected ModelAndView doResolveException(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
 	    
-	    // nexacro 요청이 아닌 경우 별도 ExceptionResolver 가 처리 할 수 있도록 null을 반환 한다.
+		prepareResolveException(request, response, handler, ex);
+
+		// nexacro 요청이 아닌 경우 별도 ExceptionResolver 가 처리 할 수 있도록 null을 반환 한다.
 	    if(NexacroUtil.isNexacroRequest(request)) {
-	        
-	        prepareResolveException(request, response, handler, ex);
             
             // Nexacro Exception 만을 handling 하도록 한다.
             // for nexacro request
