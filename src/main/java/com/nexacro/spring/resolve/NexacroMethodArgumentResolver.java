@@ -361,10 +361,22 @@ public class NexacroMethodArgumentResolver implements HandlerMethodArgumentResol
     
     private Class findGenericType(MethodParameter param) {
         
+    	// current type -> List<?>
         Type genericParameterType = param.getGenericParameterType();
         if (genericParameterType instanceof ParameterizedType) {
+        	
+        	// current type -> <?>
             Type[] types = ((ParameterizedType) genericParameterType).getActualTypeArguments();
-            return (Class) types[0];
+            
+            if(types[0] instanceof ParameterizedType) {
+            	// List<Map<String, Object>>
+            	return (Class) ((ParameterizedType) types[0]).getRawType();
+            } else {
+            	
+            	// List<Bean>
+            	// List<Map>
+            	return (Class) types[0];
+            }
         }
         
         return null;
