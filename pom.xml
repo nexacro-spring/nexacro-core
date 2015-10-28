@@ -113,6 +113,12 @@
             <groupId>org.springmodules</groupId>
             <artifactId>spring-modules-jakarta-commons</artifactId>
             <version>0.8a</version>
+            <exclusions>
+            	<exclusion>
+            		<groupId>javax.servlet</groupId>
+            		<artifactId>servlet-api</artifactId>
+            	</exclusion>
+            </exclusions>
         </dependency>
         
         <dependency>
@@ -120,6 +126,20 @@
             <artifactId>commons-configuration</artifactId>
             <version>1.6</version>
         </dependency>
+        
+     	<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.0.1</version>
+			<scope>provided</scope>
+		</dependency>
+        
+        <dependency>
+			<groupId>javax.servlet.jsp</groupId>
+			<artifactId>javax.servlet.jsp-api</artifactId>
+			<version>2.2.1</version>
+			<scope>provided</scope>
+		</dependency>
 
 		<!-- Log4j2 SLF4J Bridge -->
 		<dependency>
@@ -174,6 +194,20 @@
             <version>4.8.1</version>
             <scope>test</scope>
         </dependency>
+        
+        <dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.4</version>
+			<scope>test</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>xmlunit</groupId>
+			<artifactId>xmlunit</artifactId>
+			<version>1.2</version>
+			<scope>test</scope>
+		</dependency>
 
     </dependencies>
 
