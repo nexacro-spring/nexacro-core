@@ -3,6 +3,7 @@ package com.nexacro.spring.data;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.util.Collection;
 import java.util.Locale;
 
 import javax.servlet.ServletOutputStream;
@@ -130,24 +131,23 @@ public class FirstRowHttpResponse implements HttpServletResponse {
     public void setLocale(Locale arg0) {
     }
 
-//    @Override
-//    public String getHeader(String name) {
-//        return null;
-//    }
-//
-//    @Override
-//    public Collection<String> getHeaderNames() {
-//        return null;
-//    }
-//
-//    @Override
-//    public Collection<String> getHeaders(String headerName) {
-//        return null;
-//    }
-//
-//    @Override
-//    public int getStatus() {
-//        return 0;
-//    }
+    /****************************************************************************************/
+    /***********   Servlet Spec 3.0   *******************************************************/
+    /****************************************************************************************/
+    public String getHeader(String name) {
+        return null;
+    }
+
+    public Collection<String> getHeaderNames() {
+        return null;
+    }
+
+    public Collection<String> getHeaders(String headerName) {
+        return null;
+    }
+
+    public int getStatus() {
+        return 0;
+    }
 
 }
