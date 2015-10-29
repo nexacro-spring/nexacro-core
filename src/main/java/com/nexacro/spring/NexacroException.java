@@ -24,7 +24,7 @@ public class NexacroException extends Exception {
     public static final String DEFAULT_MESSAGE = "An Error Occured. check the ErrorCode for detail of error infomation.";
 
     private int errorCode = DEFAULT_ERROR_CODE;
-    private String errorMsg = DEFAULT_MESSAGE;
+    private String errorMsg;
 
     /**
      * 기본 생성자이다.

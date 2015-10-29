@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -13,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.MethodParameter;
 import org.springframework.util.StopWatch;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.context.request.RequestAttributes;
@@ -275,9 +277,12 @@ public class NexacroMethodArgumentResolver implements HandlerMethodArgumentResol
         String dsName = paramDataSet.name();
         DataSet dataSet = nexacroCachedData.getPlatformData().getDataSet(dsName);
         if(dataSet == null) {
-            if(logger.isDebugEnabled()) {
+        	if(logger.isDebugEnabled()) {
                 logger.debug("@ParamDataSet '" + dsName + "' argument is null.");
             }
+        	if (paramDataSet.required()) {
+				handleMissingValue(paramDataSet.name(), param);
+			}
             return null;
         }
         
@@ -330,6 +335,9 @@ public class NexacroMethodArgumentResolver implements HandlerMethodArgumentResol
             if(logger.isDebugEnabled()) {
             	logger.debug("@ParamVariable '" + varName + "' argument is null.");
             }
+            if (paramVariable.required()) {
+				handleMissingValue(paramVariable.name(), param);
+			}
             return null;
             //throw new IllegalArgumentException("invalid @ParamVariable. ex)@ParamVariable(name=\"variableName\") Object var");
         }
@@ -381,6 +389,10 @@ public class NexacroMethodArgumentResolver implements HandlerMethodArgumentResol
         
         return null;
     }
+    
+	protected void handleMissingValue(String name, MethodParameter parameter) throws NexacroConvertException {
+		throw new MissingNexacroParameterException(name, parameter.getParameterType().getSimpleName());
+	}
     
     private Object getAttribute(NativeWebRequest nativeWebRequest, String attrName) {
         return nativeWebRequest.getAttribute(attrName, RequestAttributes.SCOPE_REQUEST);
