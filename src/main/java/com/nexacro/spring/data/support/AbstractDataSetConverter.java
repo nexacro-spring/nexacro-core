@@ -53,6 +53,9 @@ public class AbstractDataSetConverter extends AbstractListenerHandler {
                 throw new NexacroConvertException("must be Map<String, Object> if you use List<Map>. target="+ds.getName());
             }
             String columnName = (String) key;
+            if(ignoreSpecfiedColumnName(columnName)) {
+            	continue;
+            }
             
             // Byte[] 변환
             Object object = NexacroConverterHelper.toObject(value);
@@ -125,6 +128,10 @@ public class AbstractDataSetConverter extends AbstractListenerHandler {
                 throw new NexacroConvertException("must be Map<String, Object> if you use List<Map>. target="+ds.getName());
             }
             String columnName = (String) key;
+            if(ignoreSpecfiedColumnName(columnName)) {
+            	continue;
+            }
+            
             if(value == null) {
                 ds.addColumn(columnName, PlatformDataType.UNDEFINED);
                 continue;
@@ -325,6 +332,16 @@ public class AbstractDataSetConverter extends AbstractListenerHandler {
             accessor.setRowType(rowType);
         }
         
+    }
+    
+    protected boolean ignoreSpecfiedColumnName(String columnName) {
+    	
+    	if(DataSetRowTypeAccessor.NAME.equals(columnName) || DataSetSavedDataAccessor.NAME.equals(columnName)) {
+        	// DataSetRowType, DataSetSavedData는 무시한다.
+        	return true;
+        }
+    	
+    	return false;
     }
     
 }
