@@ -1,10 +1,16 @@
 package com.nexacro.spring.resolve;
 
+import java.util.Locale;
+
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.View;
@@ -30,6 +36,8 @@ public class NexacroMappingExceptionResolver extends AbstractHandlerExceptionRes
 
 	private final Logger logger = LoggerFactory.getLogger(NexacroMappingExceptionResolver.class);
 
+	private MessageSource messageSource;
+	
 	private String defaultErrorMsg = NexacroException.DEFAULT_MESSAGE;
 	private boolean shouldSendStackTrace = false;
 	private boolean shouldLogStackTrace = false;
@@ -83,13 +91,19 @@ public class NexacroMappingExceptionResolver extends AbstractHandlerExceptionRes
 		this.shouldLogStackTrace = shouldLogStackTrace;
 	}
 
-	public NexacroMappingExceptionResolver() {
-    }
-    
+	/**
+	 * {@link MessageSource}를 설정한다.
+	 * 
+	 * @param messageSource
+	 */
+	public void setMessageSource(MessageSource messageSource) {
+		this.messageSource = messageSource;
+	}
+	
 	protected ModelAndView doResolveException(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
 	    
 		prepareResolveException(request, response, handler, ex);
-
+		
 		// nexacro 요청이 아닌 경우 별도 ExceptionResolver 가 처리 할 수 있도록 null을 반환 한다.
 	    if(NexacroUtil.isNexacroRequest(request)) {
             
@@ -100,12 +114,12 @@ public class NexacroMappingExceptionResolver extends AbstractHandlerExceptionRes
             if(ex instanceof NexacroException){ // NexacroConvertException
                 NexacroException nexaExp = (NexacroException) ex;
                 mav.setErrorCode(nexaExp.getErrorCode());
-                mav.setErrorMsg(getExceptionMessage(ex));
+                mav.setErrorMsg(getExceptionSendMessage(ex));
             } else {
                 // PlatformException..
                 mav.setErrorCode(NexacroException.DEFAULT_ERROR_CODE);              //Undefined error Code
 //                mav.setErrorMsg(NexacroException.DEFAULT_MESSAGE);         
-                mav.setErrorMsg(getExceptionMessage(ex));         
+                mav.setErrorMsg(getExceptionSendMessage(ex));         
             }
             
             return mav;
@@ -117,35 +131,63 @@ public class NexacroMappingExceptionResolver extends AbstractHandlerExceptionRes
 	private void prepareResolveException(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
 	    
         logException(ex, request);
-        
-        if(this.shouldLogStackTrace) {
-        	logger.error(ex.getMessage(), ex);
-        }
 
+        if(this.shouldLogStackTrace) {
+        	String exceptionMessage = getExceptionLogMessage(ex);
+        	logger.error(exceptionMessage, ex);
+        }
+        
 	}
 
-	private String getExceptionMessage(Exception e) {
+	private String getExceptionLogMessage(Exception e) {
+		
+		String exceptionMessage = getLocalizedMessage(e.getMessage());
+		
+		if(e instanceof NexacroException) {
+			String userErrorMsg = getLocalizedMessage(((NexacroException) e).getErrorMsg());
+			exceptionMessage = "errorMsg="+ userErrorMsg +", stackMessage=" +exceptionMessage;
+		}
+		
+		return exceptionMessage;
+	}
+	
+	private String getExceptionSendMessage(Exception e) {
 		
 		String userErrorMsg = null;
 		if(e instanceof NexacroException) {
-			userErrorMsg = ((NexacroException) e).getErrorMsg();
+			userErrorMsg = getLocalizedMessage(((NexacroException) e).getErrorMsg());
 		}
 		
+		String exceptionMessage = null;
 		if(this.shouldSendStackTrace) {
-			String message = e.getMessage();
+			
+			// 혹은 cause message... 
+			// 혹은 사용자가 예외를 핸들링 하기 때문에 사용자가 정의한 메세지를 던지도록 할까..?
+			exceptionMessage = getLocalizedMessage(e.getMessage());
 			if(userErrorMsg != null) {
-				message = "errorMsg="+ userErrorMsg +", stackMessage=" +message;
+				exceptionMessage = "errorMsg="+ userErrorMsg +", stackMessage=" +exceptionMessage;
 			}
-			return message;
 			
 		} else {
 			if(userErrorMsg != null) {
-				return userErrorMsg;
+				exceptionMessage = userErrorMsg;
 			} else {
-				return this.defaultErrorMsg;
+				String localizedMessage = getLocalizedMessage(this.defaultErrorMsg);
+				exceptionMessage = localizedMessage;
 			}
 		}
 		
+		return exceptionMessage;
+	}
+	
+	private String getLocalizedMessage(String reason) {
+		if(reason == null) {
+			return null;
+		}
+		if (this.messageSource != null) {
+			reason = this.messageSource.getMessage(reason, null,reason, LocaleContextHolder.getLocale());
+		}
+		return reason;
 	}
 	
 	
