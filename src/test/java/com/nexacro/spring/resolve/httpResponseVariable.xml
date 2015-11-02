@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Root xmlns="http://www.nexacro.com/platform/dataset" ver="5000">
+	<Parameters>
+		<Parameter id="varResultString" type="string">park</Parameter>
+		<Parameter id="varResultInt" type="int">1</Parameter>
+		<Parameter id="ErrorCode" type="int">0</Parameter>
+	</Parameters>
+</Root>

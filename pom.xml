@@ -127,6 +127,7 @@
             <version>1.6</version>
         </dependency>
         
+        <!-- 배포시점에 포함시키지 않는다. 외부의 Servlet Spec을 이용한다. -->
      	<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>

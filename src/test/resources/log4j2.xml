@@ -50,6 +50,10 @@
         <Logger name="com.nexacro.spring" level="TRACE" additivity="false">
             <AppenderRef ref="console" />
         </Logger>
+        <!-- 'TRACE' only performance logging. parseRequest, resolveData, sendData -->
+        <Logger name="com.nexacro.performance" level="DEBUG" additivity="false">
+            <AppenderRef ref="console" />
+        </Logger>
         <Root level="DEBUG">
             <AppenderRef ref="console" />
             <AppenderRef ref="file" />

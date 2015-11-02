@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- DispatcherServlet application context for Application's web tier. -->
+<beans xmlns="http://www.springframework.org/schema/beans" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:p="http://www.springframework.org/schema/p" 
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">
+
+	<!-- The controllers are autodetected POJOs labeled with the @Controller annotation. -->
+    <context:component-scan base-package="com.nexacro.spring.resolve">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+
+	<!-- nexacro config -->
+    <bean id="nexacroInterceptor" class="com.nexacro.spring.servlet.NexacroInterceptor"/>
+    
+    <!-- nexacro method argument resolver -->
+    <bean id="nexacroMethodArgumentResolver" class="com.nexacro.spring.resolve.NexacroMethodArgumentResolver">
+        <!-- 
+        <property name="convertListeners">
+            <list>
+                <ref bean="nexacroListener" />
+            </list>
+        </property>
+        -->
+    </bean>
+    
+    <!-- <bean id="beanNameViewResolver" class="org.springframework.web.servlet.view.BeanNameViewResolver" p:order="0"/>  -->
+    <bean id="nexacroView" class="com.nexacro.spring.view.NexacroView" >
+        <property name="defaultContentType" value="PlatformXml" />
+        <property name="defaultCharset" value="UTF-8" />
+    </bean>
+    
+    <bean id="nexacroFileView" class="com.nexacro.spring.view.NexacroFileView" />
+    
+    <!-- nexacro method return value handler -->
+    <bean id="nexacroMethodReturnValueHandler" class="com.nexacro.spring.resolve.NexacroHandlerMethodReturnValueHandler" >
+        <!-- <property name="view" value="nexacroView" />  -->
+        <property name="view" ref="nexacroView" />
+        <property name="fileView" ref="nexacroFileView" />
+    </bean>
+    
+    <!-- nexacro exception resolver -->
+    <bean id="exceptionResolver" class="com.nexacro.spring.resolve.NexacroMappingExceptionResolver" p:order="1">
+        <property name="view" ref="nexacroView" />   
+        <property name="shouldLogStackTrace" value="true" />   
+        <property name="shouldSendStackTrace" value="true" />
+        <!-- shouldSendStackTrace 가 false 일 경우 nexacro platform으로 전송되는 에러메시지  -->
+        <property name="defaultErrorMsg" value="An Error Occured. check the ErrorCode for detail of error infomation" />   
+    </bean>   
+<!-- nexacro config finish -->
+
+
+
+	<!-- HandlerMappings 선언 시작 (org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping) -->
+	   <!-- set interceptor of AnnotationHandlerMapping
+       - @MVC 개발을 하려면 RequestMappingHandlerMapping(3.1 이상)을 사용해야 한다. 단, jdk 1.5 이상의 개발환경이어야 한다.
+       - jdk 1.5이상의 개발환경이라면, BeanNameUrlHandlerMapping과 함께 RequestMappingHandlerMapping(3.1 이상)도 
+       - 기본 HandlerMapping이다. 따라서 빈 설정 파일에 별도로 선언해주지 않아도 된다. (단, 다른 HandlerMapping과 함께 사용한다면 선언해주어야 한다.) 
+     -->
+ 	<!-- Session 검사를 하지 않는 URL처리를 위한 HandlerMapping -->
+    <bean id="annotationMapper" class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping" p:order="1">
+        <property name="interceptors">
+            <list>
+                <ref bean="nexacroInterceptor" />
+            </list>
+        </property>
+    </bean>   
+	<!-- HandlerMappings 선언 끝 -->
+
+
+
+  <!--
+		- This bean processes annotated handler methods, applying Application-specific PropertyEditors
+		- for request parameter binding. It overrides the default AnnotationMethodHandlerAdapter.
+	-->
+	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+		<property name="customArgumentResolvers">
+			<list>
+				<!-- regist Nexacro Argument Resolvers.. -->
+            	<ref bean="nexacroMethodArgumentResolver"/>
+			</list>
+		</property>
+		<property name="customReturnValueHandlers">
+            <list>
+                <!-- regist Nexacro Return Value Handler.. -->
+                <ref bean="nexacroMethodReturnValueHandler"/>
+            </list>
+        </property>
+	</bean>
+
+    <!--
+        - 추가적인 어떤 맵핑 작업을 하지 않고 URL의 상징적인 view 이름을 사용하는 ViewResolver
+        - 단순 JSP만 사용할 경우 사용이 가능하다.
+        - 보통 해당 클래스를 확장하여 제공하는 별도의 ViewResolver를 사용한다.
+        - This bean configures the 'prefix' and 'suffix' properties of
+        - InternalResourceViewResolver, which resolves logical view names
+        - returned by Controllers. For example, a logical view name of "vets"
+        - will be mapped to "/WEB-INF/jsp/vets.jsp".
+    -->
+    <bean id="urlBasedView" class="org.springframework.web.servlet.view.UrlBasedViewResolver" p:order="1"
+        p:viewClass="org.springframework.web.servlet.view.JstlView"
+        p:prefix="/WEB-INF/jsp/" p:suffix=".jsp"/>
+     
+
+</beans>

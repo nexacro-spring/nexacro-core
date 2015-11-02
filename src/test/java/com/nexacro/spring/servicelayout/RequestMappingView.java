@@ -24,16 +24,14 @@ public class RequestMappingView {
 		wac.setServletContext(servletContext);
 		wac.setConfigLocations(new String[] { "com/nexacro/spring/servicelayout/application-config.xml" });
 		wac.refresh();
-		RequestMappingHandlerMapping mapping = wac
-				.getBean(RequestMappingHandlerMapping.class);
-		Map<RequestMappingInfo, HandlerMethod> map = mapping
-				.getHandlerMethods();
-		for (final Map.Entry<RequestMappingInfo, HandlerMethod> entry : map
-				.entrySet()) {
-			System.out.println(entry.getKey().getPatternsCondition()
-					.getPatterns()
-					+ " : " + entry.getValue().getMethod());
+		
+		RequestMappingHandlerMapping mapping = wac.getBean(RequestMappingHandlerMapping.class);
+		Map<RequestMappingInfo, HandlerMethod> map = mapping.getHandlerMethods();
+		
+		for (final Map.Entry<RequestMappingInfo, HandlerMethod> entry : map.entrySet()) {
+			System.out.println(entry.getKey().getPatternsCondition().getPatterns() + " : " + entry.getValue().getMethod());
 		}
+		
 		wac.close();
 	}
 }
