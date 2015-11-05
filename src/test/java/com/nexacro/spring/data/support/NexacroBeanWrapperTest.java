@@ -26,7 +26,7 @@ public class NexacroBeanWrapperTest {
     public void testInstantiateClass() {
         
         NexacroBeanWrapper accessor = createAccessor(DefaultBean.class);
-        Object insatance = accessor.getInsatance();
+        Object insatance = accessor.getInstance();
         assertNotNull(insatance);
         
         if(!(insatance instanceof DefaultBean)) {
@@ -39,7 +39,7 @@ public class NexacroBeanWrapperTest {
         
         NexacroBeanWrapper accessor = createAccessor(DefaultBean.class);
         accessor.setPropertyValue("firstName", "tom");
-        DefaultBean target = (DefaultBean) accessor.getInsatance();
+        DefaultBean target = (DefaultBean) accessor.getInstance();
         assertTrue("Set name to tom", target.getFirstName().equals("tom"));
     }
     
@@ -54,7 +54,7 @@ public class NexacroBeanWrapperTest {
         
         NexacroBeanWrapper accessor = createAccessor(DefaultBean.class);
         accessor.setPropertyValue("invalid", "tom");
-        DefaultBean target = (DefaultBean) accessor.getInsatance();
+        DefaultBean target = (DefaultBean) accessor.getInstance();
         Assert.assertEquals("Set name to tom", "tom", target.getFirstName());
     }
     

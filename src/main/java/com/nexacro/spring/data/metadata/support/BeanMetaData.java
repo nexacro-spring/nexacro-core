@@ -21,7 +21,7 @@ public class BeanMetaData extends NexacroMetaData {
     
     public BeanMetaData(Class<?> genericType) {
         NexacroBeanWrapper beanWrapper = NexacroBeanWrapper.createBeanWrapper(genericType);
-        Object insatance = beanWrapper.getInsatance();
+        Object insatance = beanWrapper.getInstance();
         setMetaData(insatance);
     }
     
@@ -29,7 +29,7 @@ public class BeanMetaData extends NexacroMetaData {
     public void setMetaData(Object obj) {
         if(!(obj instanceof NexacroBeanWrapper)) {
             NexacroBeanWrapper beanWrapper = NexacroBeanWrapper.createBeanWrapper(obj);
-            this.metaDataObject = beanWrapper.getInsatance();
+            this.metaDataObject = beanWrapper.getInstance();
         } else {
             this.metaDataObject = obj;
         }

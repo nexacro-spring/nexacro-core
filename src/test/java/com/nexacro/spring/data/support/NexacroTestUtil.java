@@ -125,7 +125,7 @@ public abstract class NexacroTestUtil {
             for (int i=0; i<dsPropertyNames.length; i++) {
                 wrapper.setPropertyValue(dsPropertyNames[i], value[i]);
             }
-            Object bean = wrapper.getInsatance();
+            Object bean = wrapper.getInstance();
             beanList.add((DefaultBean) bean);
         }
 

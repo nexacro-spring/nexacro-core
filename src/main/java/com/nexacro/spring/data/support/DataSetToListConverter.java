@@ -189,7 +189,7 @@ public class DataSetToListConverter extends AbstractDataSetConverter implements 
         NexacroBeanWrapper beanWrapper = NexacroBeanWrapper.createBeanWrapper(beanType);
         addRowAndOrgRowIntoBean(beanWrapper, ds, rowIndex);
         
-        Object bean = beanWrapper.getInsatance();
+        Object bean = beanWrapper.getInstance();
         dataList.add(bean);
     }
     
@@ -198,7 +198,7 @@ public class DataSetToListConverter extends AbstractDataSetConverter implements 
 
         // Object bean = ReflectionUtil.instantiateClass(beanType);
         NexacroBeanWrapper beanWrapper = NexacroBeanWrapper.createBeanWrapper(beanType);
-        Object bean = beanWrapper.getInsatance();
+        Object bean = beanWrapper.getInstance();
         boolean isSavedData = false;
         boolean isRemovedData = true;
         addRowIntoBean(beanWrapper, ds, removedIndex, isSavedData, isRemovedData);

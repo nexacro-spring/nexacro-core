@@ -73,7 +73,7 @@ public class DataSetToObjectConverter extends AbstractDataSetConverter implement
         NexacroBeanWrapper beanWrapper = NexacroBeanWrapper.createBeanWrapper(genericType);
         addRowAndOrgRowIntoBean(beanWrapper, ds, 0);
         
-        Object bean = beanWrapper.getInsatance();
+        Object bean = beanWrapper.getInstance();
         
         return bean;
     }

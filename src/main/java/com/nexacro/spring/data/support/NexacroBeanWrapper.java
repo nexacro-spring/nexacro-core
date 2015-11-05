@@ -79,13 +79,13 @@ public class NexacroBeanWrapper {
         Method writeMethod = property.getWriteMethod();
         try {
             ReflectionUtil.makeAccessible(writeMethod);
-            writeMethod.invoke(getInsatance(), value);
+            writeMethod.invoke(getInstance(), value);
         } catch (IllegalArgumentException e) {
-            throw new NotWritablePropertyException(getInsatance().getClass(), property.getPropertyName(), "Could not set object property", e);
+            throw new NotWritablePropertyException(getInstance().getClass(), property.getPropertyName(), "Could not set object property", e);
         } catch (IllegalAccessException e) {
-            throw new NotWritablePropertyException(getInsatance().getClass(), property.getPropertyName(), "Could not set object property", e);
+            throw new NotWritablePropertyException(getInstance().getClass(), property.getPropertyName(), "Could not set object property", e);
         } catch (InvocationTargetException e) {
-            throw new NotWritablePropertyException(getInsatance().getClass(), property.getPropertyName(), "Could not set object property", e.getTargetException());
+            throw new NotWritablePropertyException(getInstance().getClass(), property.getPropertyName(), "Could not set object property", e.getTargetException());
         }
         
 //        if(property.getOriginalPropertyName() != null) {
@@ -104,7 +104,7 @@ public class NexacroBeanWrapper {
     public void setPropertyValue(String propertyName, Object value) {
         NexacroBeanProperty property = getCachedBeanMappings().getProperty(propertyName);
         if(property == null ) {
-            throw new NotWritablePropertyException(getInsatance().getClass(), propertyName);
+            throw new NotWritablePropertyException(getInstance().getClass(), propertyName);
         }
         setPropertyValue(property, value);
     }
@@ -132,7 +132,7 @@ public class NexacroBeanWrapper {
     public Object getPropertyValue(String propertyName) {
         NexacroBeanProperty property = getCachedBeanMappings().getProperty(propertyName);
         if(property == null) {
-            throw new NotWritablePropertyException(getInsatance().getClass(), propertyName);
+            throw new NotWritablePropertyException(getInstance().getClass(), propertyName);
         }
         return getPropertyValue(property);
     }
@@ -141,7 +141,7 @@ public class NexacroBeanWrapper {
      * 현재 설정 된 class의 object instance를 반환한다.
      * @return object instance
      */
-    public Object getInsatance() {
+    public Object getInstance() {
         return beanWrapper.getWrappedInstance();
     }
     

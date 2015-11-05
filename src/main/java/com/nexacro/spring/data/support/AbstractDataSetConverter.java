@@ -258,7 +258,7 @@ public class AbstractDataSetConverter extends AbstractListenerHandler {
         
         // set saved data
         if(ds.hasSavedRow(rowIndex)) {
-            Object bean = beanWrapper.getInsatance();
+            Object bean = beanWrapper.getInstance();
             Class<?> beanType = bean.getClass();
             if(ReflectionUtil.isImplemented(beanType, DataSetSavedDataAccessor.class)) {
                 isSavedData = true;
@@ -266,7 +266,7 @@ public class AbstractDataSetConverter extends AbstractListenerHandler {
                 addRowIntoBean(savedBeanWrapper, ds, rowIndex, isSavedData, isRemovedData);
                 
                 DataSetSavedDataAccessor accessor = (DataSetSavedDataAccessor) bean;
-                accessor.setData(savedBeanWrapper.getInsatance());
+                accessor.setData(savedBeanWrapper.getInstance());
             }
         }
         
@@ -313,7 +313,7 @@ public class AbstractDataSetConverter extends AbstractListenerHandler {
             }
         }
         
-        Object bean = beanWrapper.getInsatance();
+        Object bean = beanWrapper.getInstance();
         Class beanType = bean.getClass();
         
         // row type
