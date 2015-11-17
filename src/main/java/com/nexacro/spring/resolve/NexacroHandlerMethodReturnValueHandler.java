@@ -172,15 +172,30 @@ public class NexacroHandlerMethodReturnValueHandler implements HandlerMethodRetu
         Set<String> dataSetKeySet = dataSets.keySet();
         for(String name: dataSetKeySet) {
             List list = dataSets.get(name);
-            NexacroConverter dataSetConverter = getDataSetConverter(list.getClass());
+            if(list == null) {
+            	platformData.addDataSet(new DataSet(name));
+            } else {
             
-            ConvertDefinition definition = new ConvertDefinition(name);
-            Object convert = dataSetConverter.convert(list, definition);
+	            NexacroConverter dataSetConverter = getDataSetConverter(list.getClass());
+	            if(dataSetConverter == null) {
+	                logger.debug("not found converter {} to List to DataSet({})" , name);
+	                continue;
+	            }
+	            
+	            logger.debug("found a converter({}) for converting the List to DataSet({})"
+	                    , dataSetConverter.getClass().getName()
+	                    , name);
+	            
+	            
+	            ConvertDefinition definition = new ConvertDefinition(name);
+	            Object convert = dataSetConverter.convert(list, definition);
+	            
+	            if(convert != null && convert instanceof DataSet) {
+	                platformData.addDataSet((DataSet) convert);
+	            }
+            } // end if
             
-            if(convert != null && convert instanceof DataSet) {
-                platformData.addDataSet((DataSet) convert);
-            }
-        }
+        } // end for
     }
     
     private void addVariablesIntoPlatformData(PlatformData platformData, NexacroResult nexacroResult) throws NexacroConvertException {
@@ -189,15 +204,30 @@ public class NexacroHandlerMethodReturnValueHandler implements HandlerMethodRetu
         Set<String> variableKeySets = variables.keySet();
         for(String name: variableKeySets) {
             Object object = variables.get(name);
-            NexacroConverter variableConverter = getVariableConverter(object.getClass());
+            if(object == null) {
+            	platformData.addVariable(new Variable(name));
+            } else {
             
-            ConvertDefinition definition = new ConvertDefinition(name);
-            Object convert = variableConverter.convert(object, definition);
+	            NexacroConverter variableConverter = getVariableConverter(object.getClass());
+	            if(variableConverter == null) {
+	                logger.debug("not found converter {} to Variable({})" , object.getClass(), name);
+	                continue;
+	            }
+	            
+	            logger.debug("found a converter({}) for converting the {} to Variable({})"
+	                    , variableConverter.getClass().getName()
+	                    , object.getClass()
+	                    , name);
+	            
+	            ConvertDefinition definition = new ConvertDefinition(name);
+	            Object convert = variableConverter.convert(object, definition);
+	            
+	            if(convert != null && convert instanceof Variable) {
+	                platformData.addVariable((Variable) convert);
+	            }
+            } // end if
             
-            if(convert != null && convert instanceof Variable) {
-                platformData.addVariable((Variable) convert);
-            }
-        }
+        } // end for
     }
     
     /**
