@@ -87,6 +87,7 @@ public class NexacroConverterFactory {
             if(canConvertible) {
                 ConvertiblePair pair = new ConvertiblePair(source, target); 
                 convertibleCacheMap.put(pair, converter);
+                logger.debug("{} to {} converter({}) registered.", source.getName(), target.getName(), converter.getClass().getName());
                 return converter;
             }
         }
