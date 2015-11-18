@@ -21,8 +21,10 @@ import com.nexacro.xapi.data.DataSet;
 import com.nexacro.xapi.data.DataSetList;
 import com.nexacro.xapi.data.PlatformData;
 import com.nexacro.xapi.data.VariableList;
+import com.nexacro.xapi.data.datatype.PlatformDataType;
 import com.nexacro.xapi.tx.HttpPlatformRequest;
 import com.nexacro.xapi.tx.HttpPlatformResponse;
+import com.nexacro.xapi.tx.PlatformException;
 
 @Controller
 public class TestController {
@@ -152,6 +154,20 @@ public class TestController {
 	@RequestMapping(value="/OptionalVariable")
 	public NexacroResult methodOptionalVariable(@ParamDataSet(name="optional", required=false) String optional) throws NexacroException {
 		return new NexacroResult();
+	}
+	
+	@RequestMapping(value="/NexacroFirstRowStatus")
+	public NexacroResult methodNexacroFirstRowStatus(NexacroFirstRowHandler firstRowHandler) throws PlatformException {
+		
+		DataSet ds = new DataSet("dummy");
+		ds.addColumn("dummy", PlatformDataType.STRING);
+		ds.newRow();
+		ds.set(0, "dummy", "dummydata");
+		
+		firstRowHandler.sendDataSet(ds);
+		
+		return new NexacroResult();
+		
 	}
 	
 	@RequestMapping(value="/NexacroFileResult")

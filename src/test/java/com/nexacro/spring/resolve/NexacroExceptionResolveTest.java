@@ -21,9 +21,12 @@ import org.springframework.web.context.WebApplicationContext;
 
 import com.nexacro.spring.NexacroConstants;
 import com.nexacro.spring.NexacroException;
+import com.nexacro.spring.data.NexacroFirstRowHandler;
 import com.nexacro.spring.data.NexacroResult;
+import com.nexacro.xapi.data.DataSet;
 import com.nexacro.xapi.data.PlatformData;
 import com.nexacro.xapi.data.Variable;
+import com.nexacro.xapi.data.datatype.PlatformDataType;
 import com.nexacro.xapi.tx.DataDeserializer;
 import com.nexacro.xapi.tx.DataSerializerFactory;
 import com.nexacro.xapi.tx.PlatformException;
@@ -111,6 +114,46 @@ public class NexacroExceptionResolveTest {
 		Assert.assertEquals("Variable 'ErrorMsg' must be transfered defined message.", expectedErrorMsg, actualErrorMsg);
 		
 	}
+	
+	@Test
+	public void testExceptionWithFirstRow() throws Exception {
+		
+		MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/ExceptionWithFirstRow").content(""))
+					// 200 ok
+					.andExpect(MockMvcResultMatchers.status().isOk())
+					.andReturn();
+		
+		// resolved exception..
+		Exception resolvedException = result.getResolvedException();
+		Assert.assertNotNull("Exception should be resolved.", resolvedException);
+		
+		// check response
+		String responseString = result.getResponse().getContentAsString();
+		
+		PlatformData readData = readData(responseString);
+		
+		DataSet dummy = readData.getDataSet("dummy");
+		Assert.assertNotNull("DataSet 'dummy' should be sended.", dummy);
+		
+		DataSet firstRowStatusDs = readData.getDataSet(NexacroConstants.ERROR_FIRST_ROW.ERROR_DATASET);
+		Assert.assertNotNull("FirstRow status must be transmitted.", firstRowStatusDs);
+		
+		// row count
+		int actualRowCount = firstRowStatusDs.getRowCount();
+		int expectedRowCount = 1;
+		Assert.assertEquals(expectedRowCount, actualRowCount);
+		
+		// error code
+		int actualErrorCode = -1;
+		int expectedErrorCode = firstRowStatusDs.getInt(0, NexacroConstants.ERROR_FIRST_ROW.ERROR_CODE);
+		Assert.assertEquals(expectedErrorCode, actualErrorCode);
+		
+		// error msg
+		String actualErrorMsg = "exception occured while first row";
+		String expectedErrorMsg = firstRowStatusDs.getString(0, NexacroConstants.ERROR_FIRST_ROW.ERROR_MSG);
+		Assert.assertEquals(expectedErrorMsg, actualErrorMsg);
+		
+	}
 
 	@Test
 	public void testSendUserExceptionMessage() {
@@ -155,6 +198,24 @@ public class NexacroExceptionResolveTest {
 			boolean occuredException = true;
 			if(occuredException) {
 				throw new IllegalAccessException("another exception");
+			}
+			
+			return new NexacroResult();
+		}
+		
+		@RequestMapping("/ExceptionWithFirstRow")
+		public NexacroResult throwAnotherException(NexacroFirstRowHandler firstRowHandler) throws Exception {
+			
+			DataSet ds = new DataSet("dummy");
+			ds.addColumn("dummy", PlatformDataType.STRING);
+			ds.newRow();
+			ds.set(0, "dummy", "dummydata");
+			
+			firstRowHandler.sendDataSet(ds);
+			
+			boolean occuredException = true;
+			if(occuredException) {
+				throw new IllegalAccessException("exception occured while first row");
 			}
 			
 			return new NexacroResult();

@@ -155,10 +155,9 @@ public class NexacroView extends AbstractView {
     private void sendFirstRowData(PlatformData platformData, NexacroFirstRowHandler firstRowHandler, boolean isCallEndMethod)
             throws PlatformException {
         
+    	setFirstRowStatusDataSet(platformData);
+    	
         removeTransferData(firstRowHandler, platformData);
-        
-        // add first row status DataSet
-        platformData.addDataSet(NexacroUtil.createFirstRowStatusDataSet(NexacroConstants.ERROR.DEFAULT_ERROR_CODE, null));
         
         if(logger.isDebugEnabled()) {
             logger.debug("response platformdata=[{}]", new Debugger().detail(platformData));
@@ -168,6 +167,21 @@ public class NexacroView extends AbstractView {
             NexacroFirstRowAccessor.end(firstRowHandler);
         }
     }
+    
+    private void setFirstRowStatusDataSet(PlatformData platformData){
+    	
+    	Variable errorCodeVariable = platformData.getVariable(NexacroConstants.ERROR.ERROR_CODE);
+    	if(errorCodeVariable != null && errorCodeVariable.getInt() < 0) {
+    		// error status
+    		Variable errorMsgVariable = platformData.getVariable(NexacroConstants.ERROR.ERROR_MSG);
+    		platformData.addDataSet(NexacroUtil.createFirstRowStatusDataSet(errorCodeVariable.getInt(), errorMsgVariable != null? errorMsgVariable.getString(): null));
+    	} else {
+    		// success status
+    		platformData.addDataSet(NexacroUtil.createFirstRowStatusDataSet(NexacroConstants.ERROR.DEFAULT_ERROR_CODE, null));
+    	}
+    	
+    }
+    
 
     /**
      * Statements

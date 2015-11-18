@@ -17,6 +17,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.nexacro.xapi.data.DataSet;
 import com.nexacro.xapi.data.PlatformData;
 import com.nexacro.xapi.data.Variable;
+import com.nexacro.xapi.data.datatype.PlatformDataType;
 import com.nexacro.xapi.tx.DataDeserializer;
 import com.nexacro.xapi.tx.DataSerializerFactory;
 import com.nexacro.xapi.tx.PlatformException;
@@ -33,15 +34,60 @@ import com.nexacro.xapi.tx.PlatformType;
 @ContextConfiguration(locations = { "classpath*:spring/context-*.xml" } )
 public class NexacroFirstRowHandlerTest {
 
-//    @Autowired 
-//    private LargeDataService largeService;
-    
     @Before
     public void setUp() throws Exception {
     }
 
     @After
     public void tearDown() throws Exception {
+    }
+    
+    public void testSendDataSet() {
+    	
+    	FirstRowTrackableServletOutputStream outputStream = new FirstRowTrackableServletOutputStream();
+        NexacroFirstRowHandler firstRowHandler = createFirstRowHandler(outputStream);
+        
+        String sendDataSetName = "ds1";
+        DataSet ds = new DataSet(sendDataSetName);
+        ds.addColumn("column1", PlatformDataType.INT);
+        ds.addColumn("column2", PlatformDataType.STRING);
+
+        int dataCount = 1000;
+        for(int i=0; i<dataCount; i++) {
+        	int newRow = ds.newRow();
+        	ds.set(newRow, "column1", i);
+        	ds.set(newRow, "column2", "string"+i);
+        }
+        
+        try {
+			firstRowHandler.sendDataSet(ds);
+		} catch (PlatformException e) {
+			Assert.fail("send dataset failed. e=" + e);
+		}
+        
+     // end tag
+        try {
+            NexacroFirstRowAccessor.end(firstRowHandler);
+        } catch (PlatformException e) {
+            Assert.fail("fail. call end method. e=" + e);
+        }
+        
+        PlatformData platformData = readPlatformData(outputStream);
+     
+        Assert.assertNotNull("first row function is not work. check it.", platformData);
+        
+        DataSet sendedDataSet = platformData.getDataSet(sendDataSetName);
+        Assert.assertNotNull("first row function is not work. check it.", sendedDataSet);
+        
+        int actualRowCount = sendedDataSet.getRowCount();
+        int expectedRowCount = dataCount;
+        Assert.assertEquals("sended row count not same.", expectedRowCount, actualRowCount);
+        
+    }
+    
+    @Test
+    public void testSendPlatformType() {
+    	
     }
     
     @Test
@@ -65,54 +111,6 @@ public class NexacroFirstRowHandlerTest {
         }
     }
 
-//    @Test
-    public void testFirstRowIbatis() {
-        boolean useJdbcTemplate = false;
-        doCallService(useJdbcTemplate);
-    }
-    
-//    @Test
-    public void testFirstRowJdbcTemplate() {
-        boolean useJdbcTemplate = true;
-        doCallService(useJdbcTemplate);
-    }
-
-    private void doCallService(boolean useJdbcTemplate) {
-        
-        FirstRowTrackableServletOutputStream outputStream = new FirstRowTrackableServletOutputStream();
-        NexacroFirstRowHandler firstRowHandler = createFirstRowHandler(outputStream);
-
-        String sendDataSetName = "firstRowData";
-        int initDataCount = 1000;
-        
-        int firstRowCount = 100;
-        // call service
-//        if(useJdbcTemplate) {
-//            largeService.selectJdbcLargeData(firstRowHandler, sendDataSetName, firstRowCount, initDataCount);
-//        } else {
-//            largeService.selectLargeData(firstRowHandler, sendDataSetName, firstRowCount, initDataCount);
-//        }
-        
-        // end tag
-        try {
-            NexacroFirstRowAccessor.end(firstRowHandler);
-        } catch (PlatformException e) {
-            Assert.fail("fail. call end method. e=" + e);
-        }
-        
-        PlatformData platformData = readPlatformData(outputStream);
-        
-        Assert.assertNotNull("first row function is not work. check it.", platformData);
-        
-        DataSet sendedDataSet = platformData.getDataSet(sendDataSetName);
-        Assert.assertNotNull("first row function is not work. check it.", sendedDataSet);
-        
-        int actualRowCount = sendedDataSet.getRowCount();
-        int expectedRowCount = initDataCount;
-        Assert.assertEquals("sended row count not same.", expectedRowCount, actualRowCount);
-        
-    }
-    
     private NexacroFirstRowHandler createFirstRowHandler(ServletOutputStream outputStream) {
         
         // response를 생성한다.

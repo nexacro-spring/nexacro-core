@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.io.StringReader;
 
 import junit.framework.Assert;
 
@@ -25,6 +26,8 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultHandler;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -34,7 +37,12 @@ import org.springframework.web.servlet.View;
 import com.nexacro.spring.NexacroConstants;
 import com.nexacro.spring.servlet.NexacroInterceptor;
 import com.nexacro.spring.view.NexacroView;
+import com.nexacro.xapi.data.DataSet;
 import com.nexacro.xapi.data.PlatformData;
+import com.nexacro.xapi.tx.DataDeserializer;
+import com.nexacro.xapi.tx.DataSerializerFactory;
+import com.nexacro.xapi.tx.PlatformException;
+import com.nexacro.xapi.tx.PlatformType;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
@@ -199,6 +207,42 @@ assertThat(res.getContentAsString (), is(“content”));
 	}
 	
 	@Test
+	public void testFirstRowStatus() throws Exception {
+		
+		MvcResult result = mockMvc.perform(get("/NexacroFirstRowStatus").content("").contentType(MediaType.TEXT_XML))
+				.andExpect(status().isOk())
+				.andExpect(content().contentType("text/xml;charset=UTF-8"))
+				.andReturn();
+	
+		// check response
+		String responseString = result.getResponse().getContentAsString();
+		
+		PlatformData readData = readData(responseString);
+		
+		DataSet dummy = readData.getDataSet("dummy");
+		Assert.assertNotNull("DataSet 'dummy' should be sended.", dummy);
+		
+		DataSet firstRowStatusDs = readData.getDataSet(NexacroConstants.ERROR_FIRST_ROW.ERROR_DATASET);
+		Assert.assertNotNull("FirstRow status must be transmitted.", firstRowStatusDs);
+		
+		// row count
+		int actualRowCount = firstRowStatusDs.getRowCount();
+		int expectedRowCount = 1;
+		Assert.assertEquals(expectedRowCount, actualRowCount);
+		
+		// default error code
+		int actualErrorCode = 0;
+		int expectedErrorCode = firstRowStatusDs.getInt(0, NexacroConstants.ERROR_FIRST_ROW.ERROR_CODE);
+		Assert.assertEquals(expectedErrorCode, actualErrorCode);
+		
+		// default error msg
+		String actualErrorMsg = null;
+		String expectedErrorMsg = firstRowStatusDs.getString(0, NexacroConstants.ERROR_FIRST_ROW.ERROR_MSG);
+		Assert.assertEquals(expectedErrorMsg, actualErrorMsg);
+		
+	}
+	
+	@Test
 	public void testNotEnterRequiredDataSet() throws Exception {
 		
 		mockMvc.perform(get("/NotEnterRequiredDataSet").content("").contentType(MediaType.TEXT_XML))
@@ -302,6 +346,18 @@ assertThat(res.getContentAsString (), is(“content”));
 					desc.appendText("must be empty response. NexacroView should not be processed.");
 				}
 			}));
+	}
+	
+	private PlatformData readData(String responseString) {
+		PlatformData readData = null;
+		DataDeserializer deserializer = DataSerializerFactory.getDeserializer(PlatformType.CONTENT_TYPE_XML);
+		try {
+			readData = deserializer.readData(new StringReader(responseString), null, PlatformType.DEFAULT_CHAR_SET);
+		} catch (PlatformException e) {
+			Assert.fail("response string deserialize failed. e=" + e.getMessage());
+		}
+		
+		return readData;
 	}
 	
 }
