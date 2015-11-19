@@ -293,10 +293,10 @@ public class NexacroMethodArgumentResolver implements HandlerMethodArgumentResol
             return dataSet;
         }
         
-        // support only list parameter
-        if(!List.class.equals(parameterType)) {
-            throw new IllegalArgumentException(ParamDataSet.class.getSimpleName()+" annotation support List<?> and DataSet parameter.");
-        }
+//        // support only list parameter
+//        if(!List.class.equals(parameterType)) {
+//            throw new IllegalArgumentException(ParamDataSet.class.getSimpleName()+" annotation support List<?> and DataSet parameter.");
+//        }
 
         Class convertedGenericType = findGenericType(param);
         if(convertedGenericType == null) {
@@ -304,16 +304,15 @@ public class NexacroMethodArgumentResolver implements HandlerMethodArgumentResol
             throw new IllegalArgumentException(ParamDataSet.class.getSimpleName()+" annotation must be List<?>.");
         }
         
-        
         ConvertDefinition definition = new ConvertDefinition(dsName);
         definition.setGenericType(convertedGenericType);
 
         Class<?> fromType = DataSet.class;
         Class<?> toType = parameterType;
         
-        NexacroConverter<DataSet, List> converter = NexacroConverterFactory.getConverter(fromType, toType);
+        NexacroConverter<DataSet, Object> converter = NexacroConverterFactory.getConverter(fromType, toType);
         if(converter == null) {
-            throw new IllegalArgumentException("invalid @ParamDataSet. supported type={DataSet, List<?>}");
+            throw new IllegalArgumentException("invalid @ParamDataSet. supported type={DataSet, Object<?>}");
         }
         
         try {
@@ -369,28 +368,55 @@ public class NexacroMethodArgumentResolver implements HandlerMethodArgumentResol
     }
     
     
+//    private Class findGenericType(MethodParameter param) {
+//
+//    	// current type -> List<?>
+//    	Type genericParameterType = param.getGenericParameterType();
+//    	if (genericParameterType instanceof ParameterizedType) {
+//
+//    		// current type -> <?>
+//    		Type[] types = ((ParameterizedType) genericParameterType).getActualTypeArguments();
+//
+//    		if(types[0] instanceof ParameterizedType) {
+//    			// List<Map<String, Object>>
+//    			return (Class) ((ParameterizedType) types[0]).getRawType();
+//    		} else {
+//
+//    			// List<Bean>
+//    			// List<Map>
+//    			return (Class) types[0];
+//    		}
+//    	}
+//
+//    	return null;
+//    }
+    
     private Class findGenericType(MethodParameter param) {
-        
-    	// current type -> List<?>
-        Type genericParameterType = param.getGenericParameterType();
-        if (genericParameterType instanceof ParameterizedType) {
-        	
-        	// current type -> <?>
-            Type[] types = ((ParameterizedType) genericParameterType).getActualTypeArguments();
-            
-            if(types[0] instanceof ParameterizedType) {
-            	// List<Map<String, Object>>
-            	return (Class) ((ParameterizedType) types[0]).getRawType();
-            } else {
-            	
-            	// List<Bean>
-            	// List<Map>
-            	return (Class) types[0];
-            }
-        }
-        
-        return null;
+
+    	Class<?> parameterType = param.getParameterType();
+
+    	if (!List.class.equals(parameterType)) {
+    		return parameterType;
+    	} else {
+    		Type genericParameterType = param.getGenericParameterType();
+    		if (genericParameterType instanceof ParameterizedType) {
+    			Type[] types = ((ParameterizedType) genericParameterType).getActualTypeArguments();
+    			return (Class) types[0];
+    			
+//    			if(types[0] instanceof ParameterizedType) {
+//    				// List<Map<String, Object>>
+//    				return (Class) ((ParameterizedType) types[0]).getRawType();
+//    			} else {
+//    				// List<Bean>
+//    				// List<Map>
+//    				return (Class) types[0];
+//    			}
+    		}
+    	}
+
+    	return null;
     }
+
     
 	protected void handleMissingValue(String name, MethodParameter parameter) throws NexacroConvertException {
 		throw new MissingNexacroParameterException(name, parameter.getParameterType().getSimpleName());

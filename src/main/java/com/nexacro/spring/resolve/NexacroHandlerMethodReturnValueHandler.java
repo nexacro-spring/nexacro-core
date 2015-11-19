@@ -168,15 +168,15 @@ public class NexacroHandlerMethodReturnValueHandler implements HandlerMethodRetu
     
     private void addDataSetsIntoPlatformData(PlatformData platformData, NexacroResult nexacroResult) throws NexacroConvertException {
         
-        Map<String, List> dataSets = nexacroResult.getDataSets();
+        Map<String, Object> dataSets = nexacroResult.getDataSets();
         Set<String> dataSetKeySet = dataSets.keySet();
         for(String name: dataSetKeySet) {
-            List list = dataSets.get(name);
-            if(list == null) {
+            Object object = dataSets.get(name);
+            if(object == null) {
             	platformData.addDataSet(new DataSet(name));
             } else {
             
-	            NexacroConverter dataSetConverter = getDataSetConverter(list.getClass());
+	            NexacroConverter dataSetConverter = getDataSetConverter(object.getClass());
 	            if(dataSetConverter == null) {
 	                logger.debug("not found converter {} to List to DataSet({})" , name);
 	                continue;
@@ -188,7 +188,7 @@ public class NexacroHandlerMethodReturnValueHandler implements HandlerMethodRetu
 	            
 	            
 	            ConvertDefinition definition = new ConvertDefinition(name);
-	            Object convert = dataSetConverter.convert(list, definition);
+	            Object convert = dataSetConverter.convert(object, definition);
 	            
 	            if(convert != null && convert instanceof DataSet) {
 	                platformData.addDataSet((DataSet) convert);

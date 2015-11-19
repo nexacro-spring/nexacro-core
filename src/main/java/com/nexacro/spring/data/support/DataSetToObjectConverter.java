@@ -1,6 +1,7 @@
 package com.nexacro.spring.data.support;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.nexacro.spring.data.convert.ConvertDefinition;
@@ -26,7 +27,7 @@ public class DataSetToObjectConverter extends AbstractDataSetConverter implement
         }
         
         // support type
-        if(DataSet.class.equals(source) && NexacroConverterHelper.isSupportedBean(target)) {
+        if(DataSet.class.equals(source) && !List.class.equals(target) && NexacroConverterHelper.isSupportedBean(target)) {
             return true;
         }
         

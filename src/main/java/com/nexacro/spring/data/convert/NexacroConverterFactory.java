@@ -10,7 +10,9 @@ import org.slf4j.LoggerFactory;
 
 import com.nexacro.spring.data.convert.NexacroConverter.ConvertiblePair;
 import com.nexacro.spring.data.support.DataSetToListConverter;
+import com.nexacro.spring.data.support.DataSetToObjectConverter;
 import com.nexacro.spring.data.support.ListToDataSetConverter;
+import com.nexacro.spring.data.support.ObjectToDataSetConverter;
 import com.nexacro.spring.data.support.ObjectToVariableConverter;
 import com.nexacro.spring.data.support.VariableToObjectConverter;
 
@@ -39,6 +41,8 @@ public class NexacroConverterFactory {
     private void addDefaultConverter() {
         NexacroConverterFactory.register(new DataSetToListConverter());
         NexacroConverterFactory.register(new ListToDataSetConverter());
+        NexacroConverterFactory.register(new DataSetToObjectConverter());
+        NexacroConverterFactory.register(new ObjectToDataSetConverter());
         NexacroConverterFactory.register(new VariableToObjectConverter());
         NexacroConverterFactory.register(new ObjectToVariableConverter());
     }

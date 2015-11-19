@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Root xmlns="http://www.nexacro.com/platform/dataset" ver="5000">
+	<Parameters>
+		<Parameter id="varInt" type="int">1</Parameter>
+		<Parameter id="varString" type="string">varString</Parameter>
+	</Parameters>
+	<Dataset id="ds">
+		<ColumnInfo>
+			<Column id="access" type="bigdecimal" size="8"/>
+			<Column id="commissionPercent" type="float" size="8"/>
+			<Column id="email" type="string" size="32"/>
+			<Column id="employeeId" type="int" size="4"/>
+			<Column id="firstName" type="string" size="32"/>
+			<Column id="height" type="float" size="4"/>
+			<Column id="hireDate" type="datetime" size="17"/>
+			<Column id="image" type="blob" size="256" encrypt="base64"/>
+			<Column id="lastName" type="string" size="32"/>
+			<Column id="male" type="int" size="2"/>
+			<Column id="obj" type="undefined" size="0"/>
+			<Column id="salary" type="bigdecimal" size="16"/>
+		</ColumnInfo>
+		<Rows>
+			<Row>
+				<Col id="access">11</Col>
+				<Col id="commissionPercent">11.1</Col>
+				<Col id="email">tobesoft@tobesoft.com</Col>
+				<Col id="employeeId">11</Col>
+				<Col id="firstName">firstName</Col>
+				<Col id="height">200</Col>
+				<Col id="hireDate">20090101134516072</Col>
+				<Col id="image">AQE=</Col>
+				<Col id="lastName">lastName</Col>
+				<Col id="male">1</Col>
+				<Col id="obj">java.lang.Object@1c7e2da</Col>
+				<Col id="salary">11111</Col>
+			</Row>
+		</Rows>
+	</Dataset>
+</Root>

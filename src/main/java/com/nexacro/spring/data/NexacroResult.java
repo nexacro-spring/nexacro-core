@@ -1,5 +1,6 @@
 package com.nexacro.spring.data;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -23,7 +24,7 @@ public class NexacroResult {
 
     private PlatformData platformData;
 
-    private Map<String, List> dataSetMaps;
+    private Map<String, Object> dataSetMaps;
     private Map<String, Object> variableMaps;
     
     // result status
@@ -37,7 +38,7 @@ public class NexacroResult {
     }
     
     private void initResult() {
-        dataSetMaps = new HashMap<String, List>();
+        dataSetMaps = new HashMap<String, Object>();
         variableMaps = new HashMap<String, Object>();
         platformData = new PlatformData();
     }
@@ -54,13 +55,13 @@ public class NexacroResult {
     
     /**
      * 
-     * 입력받은 dataSetName(DataSet 이름)으로  List를 <code>DataSet</code>으로 추가한다.
+     * 입력받은 dataSetName(DataSet 이름)으로  Object를 <code>DataSet</code>으로 추가한다.
      * <p><code>List</code>의 값은 <code>java.util.Map<code> 혹은 VO class만 설정가능하다.
      *
      * @param dataSetName
      * @param beans
      */
-    public void addDataSet(String dataSetName, List beans) {
+    public void addDataSet(String dataSetName, Object beans) {
         checkName(dataSetName);
         checkBean(beans);
         
@@ -90,7 +91,7 @@ public class NexacroResult {
         variableMaps.put(variableName, object);
     }
     
-    public Map<String, List> getDataSets() {
+    public Map<String, Object> getDataSets() {
         return Collections.unmodifiableMap(dataSetMaps);
     }
     
@@ -104,8 +105,11 @@ public class NexacroResult {
         }
     }
     
-    private void checkBean(List bean) {
-    }
+	private void checkBean(Object bean) {
+		if (bean == null) {
+			throw new IllegalArgumentException("Bean is null");
+		}
+	}
     
     public PlatformData getPlatformData() {
         return platformData;

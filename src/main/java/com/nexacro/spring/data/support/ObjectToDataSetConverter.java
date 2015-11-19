@@ -1,5 +1,6 @@
 package com.nexacro.spring.data.support;
 
+import java.util.List;
 import java.util.Map;
 
 import com.nexacro.spring.data.convert.ConvertDefinition;
@@ -20,16 +21,16 @@ public class ObjectToDataSetConverter extends AbstractDataSetConverter implement
     @Override
     public boolean canConvert(Class source, Class target) {
 
-        if(source == null || target == null) {
-            return false;
-        }
-        
-        // support list sub class
-        if(NexacroConverterHelper.isSupportedBean(source) && DataSet.class.equals(target)) {
-            return true;
-        }
-        
-        return false;
+    	if(source == null || target == null) {
+    		return false;
+    	}
+
+    	// support type
+    	if(!List.class.isAssignableFrom(source) && NexacroConverterHelper.isSupportedBean(source) && DataSet.class.equals(target)) {
+    		return true;
+    	}
+    	
+    	return false;
     }
     
     @Override
@@ -38,10 +39,7 @@ public class ObjectToDataSetConverter extends AbstractDataSetConverter implement
         if(definition ==null) {
             throw new IllegalArgumentException(ConvertDefinition.class.getSimpleName()+" must not be null.");
         }
-        if(source == null) {
-            return new DataSet(definition.getName());
-        }
-        
+
         if(source == null) {
             return new DataSet(definition.getName());
         }
@@ -54,7 +52,7 @@ public class ObjectToDataSetConverter extends AbstractDataSetConverter implement
             ds = convertBeanToDataSet(source, definition);
         }
         
-        return null;
+        return ds;
     }
 
     private DataSet convertBeanToDataSet(Object source, ConvertDefinition definition) throws NexacroConvertException {
