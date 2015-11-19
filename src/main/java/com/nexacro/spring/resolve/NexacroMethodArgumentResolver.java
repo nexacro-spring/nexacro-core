@@ -367,30 +367,6 @@ public class NexacroMethodArgumentResolver implements HandlerMethodArgumentResol
         
     }
     
-    
-//    private Class findGenericType(MethodParameter param) {
-//
-//    	// current type -> List<?>
-//    	Type genericParameterType = param.getGenericParameterType();
-//    	if (genericParameterType instanceof ParameterizedType) {
-//
-//    		// current type -> <?>
-//    		Type[] types = ((ParameterizedType) genericParameterType).getActualTypeArguments();
-//
-//    		if(types[0] instanceof ParameterizedType) {
-//    			// List<Map<String, Object>>
-//    			return (Class) ((ParameterizedType) types[0]).getRawType();
-//    		} else {
-//
-//    			// List<Bean>
-//    			// List<Map>
-//    			return (Class) types[0];
-//    		}
-//    	}
-//
-//    	return null;
-//    }
-    
     private Class findGenericType(MethodParameter param) {
 
     	Class<?> parameterType = param.getParameterType();
@@ -401,16 +377,14 @@ public class NexacroMethodArgumentResolver implements HandlerMethodArgumentResol
     		Type genericParameterType = param.getGenericParameterType();
     		if (genericParameterType instanceof ParameterizedType) {
     			Type[] types = ((ParameterizedType) genericParameterType).getActualTypeArguments();
-    			return (Class) types[0];
-    			
-//    			if(types[0] instanceof ParameterizedType) {
-//    				// List<Map<String, Object>>
-//    				return (Class) ((ParameterizedType) types[0]).getRawType();
-//    			} else {
-//    				// List<Bean>
-//    				// List<Map>
-//    				return (Class) types[0];
-//    			}
+    			if(types[0] instanceof ParameterizedType) {
+    				// List<Map<String, Object>>
+    				return (Class) ((ParameterizedType) types[0]).getRawType();
+    			} else {
+    				// List<Bean>
+    				// List<Map>
+    				return (Class) types[0];
+    			}
     		}
     	}
 
