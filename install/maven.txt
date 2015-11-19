@@ -1,2 +1,5 @@
 # central에 존재하지 않는 library이다.
 mvn install:install-file -Dfile=./lib/nexacro-xapi-1.0.jar -DgroupId=com.nexacro -DartifactId=nexacro-xapi -Dversion=1.0 -Dpackaging=jar
+
+# archetype
+mvn archetype:create-from-project 
