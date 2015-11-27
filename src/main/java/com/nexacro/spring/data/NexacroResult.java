@@ -124,9 +124,6 @@ public class NexacroResult {
 	}
     
 	private void checkBean(Object bean) {
-		if (bean == null) {
-			throw new IllegalArgumentException("Bean should not be null");
-		}
 	}
 	
     public PlatformData getPlatformData() {
