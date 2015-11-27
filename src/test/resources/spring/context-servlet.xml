@@ -78,7 +78,10 @@
 		- This bean processes annotated handler methods, applying Application-specific PropertyEditors
 		- for request parameter binding. It overrides the default AnnotationMethodHandlerAdapter.
 	-->
+	<!-- 
 	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+	 -->
+	<bean class="com.nexacro.spring.resolve.NexacroRequestMappingHandlerAdapter">
 		<property name="customArgumentResolvers">
 			<list>
 				<!-- regist Nexacro Argument Resolvers.. -->

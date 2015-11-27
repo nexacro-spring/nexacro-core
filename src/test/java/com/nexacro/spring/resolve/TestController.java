@@ -69,6 +69,32 @@ public class TestController {
 		return result;
 	}
 	
+	@RequestMapping(value="/DataSetWithASingleRowToMap", method={RequestMethod.GET})
+	public NexacroResult methodDataSetWithOneRowToMap(@ParamDataSet(name="ds") Map<String, Object> map) throws NexacroException {
+		
+		if(map == null) {
+			throw new NexacroException("DataSet 'ds' have not been resolved");
+		}
+		
+		NexacroResult result = new NexacroResult();
+		result.addDataSet("dsResult", map);
+		
+		return result;
+	}
+	
+	@RequestMapping(value="/DataSetWithASingleRowToObject", method={RequestMethod.GET})
+	public NexacroResult methodDataSetWithOneRowToObject(@ParamDataSet(name="ds") DefaultBean defaultBean) throws NexacroException {
+		
+		if(defaultBean == null) {
+			throw new NexacroException("DataSet 'ds' have not been resolved");
+		}
+		
+		NexacroResult result = new NexacroResult();
+		result.addDataSet("dsResult", defaultBean);
+		
+		return result;
+	}
+	
 	@RequestMapping(value="/Variable", method={RequestMethod.GET})
 	public NexacroResult methodVariable(@ParamVariable(name="varInt") int varInt, @ParamVariable(name="varString") String varString) throws NexacroException {
 		if(varInt != 1) {

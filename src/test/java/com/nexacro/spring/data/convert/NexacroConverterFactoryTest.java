@@ -56,6 +56,16 @@ public class NexacroConverterFactoryTest {
         converter = NexacroConverterFactory.getConverter(source, target);
         Assert.assertNotNull(source + " -> " + target + " converter not registed.", converter);
 
+        source = DataSet.class;
+        target = Object.class;
+        converter = NexacroConverterFactory.getConverter(source, target);
+        Assert.assertNotNull(source + " -> " + target + " converter not registed.", converter);
+        
+        source = Object.class;
+        target = DataSet.class;
+        converter = NexacroConverterFactory.getConverter(source, target);
+        Assert.assertNotNull(source + " -> " + target + " converter not registed.", converter);
+        
     }
 
     @Test

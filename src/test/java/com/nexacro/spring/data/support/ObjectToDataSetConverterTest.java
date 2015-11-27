@@ -2,7 +2,6 @@ package com.nexacro.spring.data.support;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,11 +13,8 @@ import org.junit.Test;
 
 import com.nexacro.spring.data.convert.ConvertDefinition;
 import com.nexacro.spring.data.convert.NexacroConvertException;
-import com.nexacro.spring.data.support.NexacroTestUtil.StaticPropertyBean;
 import com.nexacro.spring.data.support.bean.DefaultBean;
 import com.nexacro.spring.util.ReflectionUtil;
-import com.nexacro.xapi.data.ColumnHeader;
-import com.nexacro.xapi.data.ConstantColumnHeader;
 import com.nexacro.xapi.data.DataSet;
 
 public class ObjectToDataSetConverterTest {
@@ -88,7 +84,8 @@ public class ObjectToDataSetConverterTest {
 		}
 
 		DataSet dataset = (DataSet) ds;
-		Assert.assertEquals("lastName", dataset.getObject(0, "lastName"));
+		Assert.assertEquals(map.get("firstName"), dataset.getObject(0, "firstName"));
+		Assert.assertEquals(map.get("lastName"), dataset.getObject(0, "lastName"));
 	}
     
     @Test

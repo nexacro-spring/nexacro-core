@@ -26,8 +26,6 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultHandler;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -43,10 +41,11 @@ import com.nexacro.xapi.tx.DataDeserializer;
 import com.nexacro.xapi.tx.DataSerializerFactory;
 import com.nexacro.xapi.tx.PlatformException;
 import com.nexacro.xapi.tx.PlatformType;
+import com.nexacro.xapi.tx.impl.PlatformXmlDataDeserializer;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
-@ContextConfiguration(locations = { "classpath*:spring/context-servlet.xml" } )
+@ContextConfiguration(locations = { "classpath*:spring/context-servlet.xml" })
 public class NexacroDataResolveTest {
 
 	/*
@@ -172,6 +171,62 @@ assertThat(res.getContentAsString (), is(“content”));
 //		Assert.assertTrue("Result 'DataSet' structure not same.", expectedDataSet.equalsStructure(actualDataSet));
 //		Assert.assertTrue("Result 'DataSet' data should be same.", expectedDataSet.equalsData(actualDataSet));
 		
+	}
+	
+	@Test
+	public void testResolveDataSetWithASingleRowToMap() throws Exception {
+		String requestFileName = "src/test/java/com/nexacro/spring/resolve/httpRequest.xml";
+		InputStream requestInputStream = new FileInputStream(new File(requestFileName));
+		byte[] byteArray = IOUtils.toByteArray(requestInputStream);
+		
+		MvcResult andReturn = mockMvc.perform(get("/DataSetWithASingleRowToMap").content(byteArray).contentType(MediaType.TEXT_XML))
+					.andExpect(status().isOk())
+					.andExpect(content().contentType("text/xml;charset=UTF-8"))
+					.andReturn();
+		
+		MockHttpServletResponse servletResponse = andReturn.getResponse();
+		String actualResult = servletResponse.getContentAsString();
+		
+		PlatformXmlDataDeserializer deserializer = new PlatformXmlDataDeserializer();
+		PlatformData actualPlatformData = deserializer.readData(new StringReader(actualResult), null, "UTF-8");
+		DataSet actualTedDataSet = actualPlatformData.getDataSet(0);
+		
+		String responseFileName = "src/test/java/com/nexacro/spring/resolve/httpResponseMap.xml";
+		InputStream responseInputStream = new FileInputStream(new File(responseFileName));
+		String expectedResult = IOUtils.toString(responseInputStream);
+
+		PlatformData expectedPlatformData = deserializer.readData(new StringReader(expectedResult), null, "UTF-8");
+		DataSet expectedDataSet = expectedPlatformData.getDataSet(0);
+		
+		Assert.assertEquals("result data has not resolved.", expectedDataSet.getObject(0, "employeeId"), actualTedDataSet.getObject(0, "employeeId"));
+	}
+	
+	@Test
+	public void testResolveDataSetWithASingleRowToObject() throws Exception {
+		String requestFileName = "src/test/java/com/nexacro/spring/resolve/httpRequest.xml";
+		InputStream requestInputStream = new FileInputStream(new File(requestFileName));
+		byte[] byteArray = IOUtils.toByteArray(requestInputStream);
+		
+		MvcResult andReturn = mockMvc.perform(get("/DataSetWithASingleRowToObject").content(byteArray).contentType(MediaType.TEXT_XML))
+					.andExpect(status().isOk())
+					.andExpect(content().contentType("text/xml;charset=UTF-8"))
+					.andReturn();
+		
+		MockHttpServletResponse servletResponse = andReturn.getResponse();
+		String actualResult = servletResponse.getContentAsString();
+		
+		PlatformXmlDataDeserializer deserializer = new PlatformXmlDataDeserializer();
+		PlatformData actualPlatformData = deserializer.readData(new StringReader(actualResult), null, "UTF-8");
+		DataSet actualTedDataSet = actualPlatformData.getDataSet(0);
+		
+		String responseFileName = "src/test/java/com/nexacro/spring/resolve/httpResponseMap.xml";
+		InputStream responseInputStream = new FileInputStream(new File(responseFileName));
+		String expectedResult = IOUtils.toString(responseInputStream);
+
+		PlatformData expectedPlatformData = deserializer.readData(new StringReader(expectedResult), null, "UTF-8");
+		DataSet expectedDataSet = expectedPlatformData.getDataSet(0);
+		
+		Assert.assertEquals("result data has not resolved.", expectedDataSet.getObject(0, "employeeId"), actualTedDataSet.getObject(0, "employeeId"));
 	}
 	
 	@Test
