@@ -30,6 +30,10 @@ public class ObjectToDataSetConverter extends AbstractDataSetConverter implement
     		return true;
     	}
     	
+		if (Map.class.isAssignableFrom(source) && DataSet.class.equals(target)) {
+			return true;
+		}
+    	
     	return false;
     }
     

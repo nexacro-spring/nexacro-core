@@ -29,6 +29,10 @@ public class DataSetToObjectConverter extends AbstractDataSetConverter implement
         // support type
         if(DataSet.class.equals(source) && !List.class.equals(target) && NexacroConverterHelper.isSupportedBean(target)) {
             return true;
+        } 
+        
+        if (DataSet.class.equals(source) && Map.class.isAssignableFrom(target)) {
+        	return true;
         }
         
         return false;
