@@ -61,7 +61,7 @@ public class NexacroResult {
      * @param dataSetName
      * @param beans
      */
-    public void addDataSet(String dataSetName, List beans) {
+    public void addDataSet(String dataSetName, List<?> beans) {
         checkName(dataSetName);
         checkBean(beans);
         
