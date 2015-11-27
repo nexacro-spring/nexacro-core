@@ -55,8 +55,23 @@ public class NexacroResult {
     
     /**
      * 
-     * 입력받은 dataSetName(DataSet 이름)으로  Object를 <code>DataSet</code>으로 추가한다.
+     * 입력받은 dataSetName(DataSet 이름)으로  List를 <code>DataSet</code>으로 추가한다.
      * <p><code>List</code>의 값은 <code>java.util.Map<code> 혹은 VO class만 설정가능하다.
+     *
+     * @param dataSetName
+     * @param beans
+     */
+    public void addDataSet(String dataSetName, List beans) {
+        checkName(dataSetName);
+        checkBean(beans);
+        
+        dataSetMaps.put(dataSetName, beans);
+    }
+    
+    /**
+     * 
+     * 입력받은 dataSetName(DataSet 이름)으로 Object를 <code>DataSet</code>으로 추가한다.
+     * <p><code>Object</code>의 값은 <code>java.util.Map<code> 혹은 VO class만 설정가능하다.
      *
      * @param dataSetName
      * @param beans
@@ -105,12 +120,15 @@ public class NexacroResult {
         }
     }
     
-	private void checkBean(Object bean) {
-		if (bean == null) {
-			throw new IllegalArgumentException("Bean is null");
-		}
+	private void checkBean(List bean) {
 	}
     
+	private void checkBean(Object bean) {
+		if (bean == null) {
+			throw new IllegalArgumentException("Bean should not be null");
+		}
+	}
+	
     public PlatformData getPlatformData() {
         return platformData;
     }
