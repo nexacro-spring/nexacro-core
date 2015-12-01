@@ -1,0 +1,8 @@
+1. nexacro library package
+ - nexacro-parent --> mvn clean install
+ - nexacro-sample-egov --> mvn clean archetype:create-from-project -DpackageName=nexacro.sample
+ 	- target > generated-sources > archetype > mvn clean install
+  - nexacro-simple-egov --> mvn clean archetype:create-from-project -DpackageName=nexacro.sample
+ 	- target > generated-sources > archetype > mvn clean install
+2. nexacro library update
+ - maven repository update..
