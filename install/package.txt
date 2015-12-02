@@ -8,16 +8,4 @@
  - maven repository update..
  
 3. nexus 배포 시
- - nexacro-parent에  <distributionManagement> 설정.    
-        <repository>
-			<id>tobesoft</id>
-			<url>http://59.10.169.22:8080/nexus/content/repositories/tobesoft</url>
-		</repository>
- - maven setting.xml에 tobesoft 서버 등록 (계정 정보 등록)
-	  <servers>
-	    <server>
-	      <id>tobesoft</id>
-	      <username></username>
-	      <password></password>
-	    </server>
- - mvn deploy 실행.
+ - http://cacao.tobesoft.co.kr/nexus 접속 후 deploy..
