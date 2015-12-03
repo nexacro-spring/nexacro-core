@@ -8,4 +8,14 @@
  - maven repository update..
  
 3. nexus 배포 시
- - http://cacao.tobesoft.co.kr/nexus 접속 후 deploy..
+ - 수동 배포
+   - package 후  http://cacao.tobesoft.co.kr/nexus 접속 후 deploy..
+ - Maven deploy 배포
+   - setting.xml에 server 등록
+	    <server>
+	      <id>tobesoft</id>
+	      <username></username>
+	      <password></password>
+	    </server>
+   - mvn clean deploy 실행.
+ 
