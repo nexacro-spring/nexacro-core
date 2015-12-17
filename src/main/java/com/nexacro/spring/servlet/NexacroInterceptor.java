@@ -13,7 +13,8 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import com.nexacro.spring.NexacroConstants;
 import com.nexacro.spring.context.NexacroContext;
 import com.nexacro.spring.context.NexacroContextHolder;
-import com.nexacro.xapi.tx.HttpPlatformRequest;
+import com.nexacro.xapi.data.Debugger;
+import com.nexacro.xapi.data.PlatformData;
 
 /**
  * nexacro platform으로 부터 데이터를 수신받아 PlatformData로 변환하는 {@link HandlerInterceptor} 이다.
@@ -24,6 +25,7 @@ import com.nexacro.xapi.tx.HttpPlatformRequest;
  */
 public class NexacroInterceptor extends HandlerInterceptorAdapter {
 
+	private Logger logger = LoggerFactory.getLogger(NexacroInterceptor.class);
     private Logger performanceLogger = LoggerFactory.getLogger(NexacroConstants.PERFORMANCE_LOGGER);
     
     /**
@@ -50,7 +52,10 @@ public class NexacroInterceptor extends HandlerInterceptorAdapter {
         try {
             sw.start("parse request");
             NexacroContext context = NexacroContextHolder.getNexacroContext(request, response);
-            HttpPlatformRequest platformRequest = context.getPlatformRequest();
+            PlatformData platformData = context.getPlatformData();
+            if(logger.isDebugEnabled()) {
+                logger.debug("got request=[{}]", new Debugger().detail(platformData));
+            }
         } finally {
             sw.stop();
             if(performanceLogger.isTraceEnabled()) {
