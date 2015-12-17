@@ -3,6 +3,7 @@ package com.nexacro.spring.data.support;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -123,6 +124,52 @@ public class ListToDataSetConverterTest {
         }
         
         NexacroTestUtil.compareDefaultDataSet((DataSet) ds);
+        
+    }
+    
+    @Test
+    public void testConvertListFlexibleMapToDataSet() {
+
+    	String addColumnName = "otherColumn";
+    	String addData = "otherColumnData";
+    	
+    	List<Map<String, Object>> defaultMap = NexacroTestUtil.createDefaultMaps();
+    	Map<String, Object> otherStructureMap = new HashMap<String, Object>();
+    	otherStructureMap.put(addColumnName, addData);
+    	// add other structure map..
+    	defaultMap.add(otherStructureMap);
+        
+        ConvertDefinition definition = new ConvertDefinition("ds");
+        
+        Object ds = null;
+        try {
+            ds = converter.convert(defaultMap, definition);
+        } catch (NexacroConvertException e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+        
+        if(!(ds instanceof DataSet)) {
+            Assert.fail("converted object must be implemented DataSet");
+        }
+        
+        DataSet convertedDs = (DataSet) ds;
+        
+        // original column 12, added column 1
+        int expectedColumnCount = 12 + 1;
+        int actualColumnCount = convertedDs.getColumnCount();
+        Assert.assertEquals("other key in the Map column should be added.", expectedColumnCount, actualColumnCount);
+        
+        ColumnHeader column = convertedDs.getColumn(addColumnName);
+        Assert.assertNotNull(column);
+        
+        // original row 2, added row 1
+        int expectedRowCount = 2 + 1;
+        int actualRowCount = convertedDs.getRowCount();
+        Assert.assertEquals(expectedRowCount, actualRowCount);
+
+        String addedData = convertedDs.getString(2, addColumnName);
+        Assert.assertEquals(addData, addedData);
         
     }
     

@@ -53,14 +53,22 @@ public class AbstractDataSetConverter extends AbstractListenerHandler {
                 throw new NexacroConvertException("must be Map<String, Object> if you use List<Map>. target="+ds.getName());
             }
             String columnName = (String) key;
-            if(ignoreSpecfiedColumnName(columnName)) {
-            	continue;
-            }
+            if (ignoreSpecfiedColumnName(columnName)) {
+     			continue;
+     		}
             
             // Byte[] 변환
             Object object = NexacroConverterHelper.toObject(value);
             
             int columnIndex = ds.indexOfColumn(columnName);
+            if(columnIndex < 0) {
+            	// flexible map data. 'null' data should be ignored
+            	ds.setChangeStructureWithData(true);
+
+            	if(!addColumnByMap(ds, columnName, value)) {
+            		continue;
+            	}
+            }
             // fire event
             object = fireDataSetConvertedValue(ds, object, newRow, columnIndex, false, false);
             
@@ -128,21 +136,8 @@ public class AbstractDataSetConverter extends AbstractListenerHandler {
                 throw new NexacroConvertException("must be Map<String, Object> if you use List<Map>. target="+ds.getName());
             }
             String columnName = (String) key;
-            if(ignoreSpecfiedColumnName(columnName)) {
-            	continue;
-            }
             
-            if(value == null) {
-                ds.addColumn(columnName, PlatformDataType.UNDEFINED);
-                continue;
-            }
-            
-            // add column
-            if(!NexacroConverterHelper.isConvertibleType(value.getClass())) {
-                continue;
-            }
-            DataType dataTypeOfValue = NexacroConverterHelper.getDataTypeOfValue(value);
-            ds.addColumn(columnName, dataTypeOfValue);
+            boolean isAdded = addColumnByMap(ds, columnName, value);
             
         }
     }
@@ -180,6 +175,27 @@ public class AbstractDataSetConverter extends AbstractListenerHandler {
             }
         }
         
+    }
+    
+    protected boolean addColumnByMap(DataSet ds, String columnName, Object value) {
+    	
+    	if (ignoreSpecfiedColumnName(columnName)) {
+			return false;
+		}
+
+		if (value == null) {
+			ds.addColumn(columnName, PlatformDataType.UNDEFINED);
+			return false;
+		}
+
+		// add column
+		if (!NexacroConverterHelper.isConvertibleType(value.getClass())) {
+			return false;
+		}
+		DataType dataTypeOfValue = NexacroConverterHelper.getDataTypeOfValue(value);
+		ds.addColumn(columnName, dataTypeOfValue);
+		
+		return true;
     }
     
     /**
