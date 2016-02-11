@@ -300,17 +300,18 @@ public class NexacroBeanWrapper {
                 }
                 
                 readMethod = descriptor.getReadMethod();
-                if(readMethod != null) {
-                    return true;
+                if(readMethod == null) {
+                	 if(logger.isDebugEnabled()) {
+                         logger.debug("skipped property {} of bean class[{}]:" +
+                             " Bean Property {} is not readable or has an invalid getter or setter." +
+                             " Does the return type of the getter match the parameter type of the setter"
+                             , name, clazz, name);
+                         
+                     }
+                	 return false;
                 }
                 
-                if(logger.isDebugEnabled()) {
-                    logger.debug("skipped property {} of bean class[{}]:" +
-                        " Bean Property {} is not readable or has an invalid getter or setter." +
-                        " Does the return type of the getter match the parameter type of the setter"
-                        , name, clazz, name);
-                    
-                }
+               
                 
             } else if(readMethod == null || writeMethod == null) {
                 return false;

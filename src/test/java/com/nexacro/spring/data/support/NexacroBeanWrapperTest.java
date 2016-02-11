@@ -2,6 +2,7 @@ package com.nexacro.spring.data.support;
 
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import junit.framework.Assert;
@@ -43,6 +44,16 @@ public class NexacroBeanWrapperTest {
         assertTrue("Set name to tom", target.getFirstName().equals("tom"));
     }
     
+    @Test
+    public void testNotDefiendReadableProperty() {
+        
+        NexacroBeanWrapper accessor = createAccessor(NotDefinedStaticGetter.class);
+        
+        NexacroBeanProperty property = accessor.getProperty("staticProp");
+        assertNull("not defined static getter must be null.", property);
+        
+    }
+    
     @Rule 
     public ExpectedException thrown= ExpectedException.none();
     
@@ -63,4 +74,23 @@ public class NexacroBeanWrapperTest {
         return beanWrapper;
     }
     
+    private static class NotDefinedStaticGetter {
+    	
+    	private static String staticProp;
+    	
+    	private String dummy;
+
+		public static void setStaticProp(String staticProp) {
+			NotDefinedStaticGetter.staticProp = staticProp;
+		}
+
+		public String getDummy() {
+			return dummy;
+		}
+
+		public void setDummy(String dummy) {
+			this.dummy = dummy;
+		}
+		
+    }
 }
