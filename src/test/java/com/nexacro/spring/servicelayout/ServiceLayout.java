@@ -45,4 +45,11 @@ public class ServiceLayout {
 		return builder.toString();
 	}
 
+	@Override
+	public String toString() {
+		return "ServiceLayout [getPattern()=" + getPattern()
+				+ ", getMethods()=" + getMethods() + ", getParameters()="
+				+ getParameters() + "]";
+	}
+
 }
