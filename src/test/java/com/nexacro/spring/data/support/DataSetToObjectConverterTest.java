@@ -25,11 +25,13 @@ import com.nexacro.spring.data.convert.ConvertDefinition;
 import com.nexacro.spring.data.convert.NexacroConvertException;
 import com.nexacro.spring.data.support.NexacroTestUtil.StaticPropertyBean;
 import com.nexacro.spring.data.support.bean.DefaultBean;
+import com.nexacro.spring.data.support.bean.UpperCaseBean;
 import com.nexacro.spring.util.ReflectionUtil;
 import com.nexacro.xapi.data.ColumnHeader;
 import com.nexacro.xapi.data.ConstantColumnHeader;
 import com.nexacro.xapi.data.DataSet;
 import com.nexacro.xapi.data.PlatformData;
+import com.nexacro.xapi.data.datatype.PlatformDataType;
 import com.nexacro.xapi.tx.DataDeserializer;
 import com.nexacro.xapi.tx.DataSerializerFactory;
 import com.nexacro.xapi.tx.PlatformException;
@@ -101,6 +103,94 @@ public class DataSetToObjectConverterTest {
         if (!(ds instanceof Object)) {
 			Assert.fail("converted object must be implemented DataSet");
 		}
+    }
+    
+    @Test
+    public void testUpperCase() {
+    	
+    	String[] columnNames = {
+      		  "firstOnly"
+      		  , "FIrstAndSecond"
+      		  , "ALL"
+        };
+    	
+    	String[] columnValues = {
+    			"first"
+    			, "second"
+    			, "all"
+    	};
+    	
+    	DataSet ds = new DataSet("dsUpper");
+    	for(int i=0; i<columnNames.length; i++) {
+    		ds.addColumn(columnNames[i], PlatformDataType.STRING);
+    	}
+
+    	ds.newRow();
+    	for(int i=0; i<columnValues.length; i++) {
+    		ds.set(0, columnNames[i], columnValues[i]);
+    	}
+    	
+    	ConvertDefinition definition = new ConvertDefinition("dsUpper");
+    	definition.setGenericType(UpperCaseBean.class);
+    	
+    	UpperCaseBean upperCaseBean = null;
+    	try {
+    		upperCaseBean = (UpperCaseBean) converter.convert(ds, definition);
+		} catch (NexacroConvertException e) {
+			Assert.fail(e.getMessage());
+		}
+    	
+    	Assert.assertNotNull(upperCaseBean);
+    	
+    	Assert.assertEquals(columnValues[0], upperCaseBean.getFirstOnly());
+    	Assert.assertEquals(columnValues[1], upperCaseBean.getFIrstAndSecond());
+    	Assert.assertEquals(columnValues[2], upperCaseBean.getALL());
+    	
+    }
+    
+    @Test
+    public void testUpperCaseInvalidColumnName() {
+    	
+    	String[] columnNames = {
+      		  "FirstOnly"
+      		  , "FIrstAndSecond"
+      		  , "ALL"
+        };
+    	
+    	String[] columnValues = {
+    			"first"
+    			, "second"
+    			, "all"
+    	};
+    	
+    	DataSet ds = new DataSet("dsUpper");
+    	for(int i=0; i<columnNames.length; i++) {
+    		ds.addColumn(columnNames[i], PlatformDataType.STRING);
+    	}
+
+    	ds.newRow();
+    	for(int i=0; i<columnValues.length; i++) {
+    		ds.set(0, columnNames[i], columnValues[i]);
+    	}
+    	
+    	ConvertDefinition definition = new ConvertDefinition("dsUpper");
+    	definition.setGenericType(UpperCaseBean.class);
+    	
+    	UpperCaseBean upperCaseBean = null;
+    	try {
+    		upperCaseBean = (UpperCaseBean) converter.convert(ds, definition);
+		} catch (NexacroConvertException e) {
+			Assert.fail(e.getMessage());
+		}
+    	
+    	Assert.assertNotNull(upperCaseBean);
+    	
+    	// 필드의 첫번째 자리의 글자만 대문자일 경우 데이터셋의 컬럼 명칭은 소문자로 변환이 되어야 한다.
+    	Assert.assertNull("Only the first letter of the name of the column position of the field, if one data set must be uppercase is converted to lowercase."
+    			, upperCaseBean.getFirstOnly());
+    	Assert.assertEquals(columnValues[1], upperCaseBean.getFIrstAndSecond());
+    	Assert.assertEquals(columnValues[2], upperCaseBean.getALL());
+    	
     }
     
     @Test

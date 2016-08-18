@@ -204,6 +204,27 @@ public class NexacroBeanWrapper {
             return mapping;
         }
         
+        /**
+         * java.beans.Introspector 의 property name 변환</p>
+         * get/set 메서드의 이름 중 첫번째 두번째 모두 대문자 일 경우 대문자 반환
+    	 * 아닐 경우 첫번째 글자만 소문자로 변환한다.
+    	 * 
+    	 * <pre>
+public static String decapitalize(String name) {
+if (name == null || name.length() == 0) {
+    return name;
+}
+if (name.length() > 1 && Character.isUpperCase(name.charAt(1)) &&
+		Character.isUpperCase(name.charAt(0))){
+    return name;
+}
+char chars[] = name.toCharArray();
+chars[0] = Character.toLowerCase(chars[0]);
+return new String(chars);
+}
+    	 * </pre>
+         * @param beanWrapper
+         */
         private void initBeanPropertyNames(BeanWrapper beanWrapper) {
             
             propertyCache = new HashMap<String, NexacroBeanProperty>();

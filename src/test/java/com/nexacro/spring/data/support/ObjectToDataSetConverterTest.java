@@ -2,6 +2,7 @@ package com.nexacro.spring.data.support;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,7 +15,9 @@ import org.junit.Test;
 import com.nexacro.spring.data.convert.ConvertDefinition;
 import com.nexacro.spring.data.convert.NexacroConvertException;
 import com.nexacro.spring.data.support.bean.DefaultBean;
+import com.nexacro.spring.data.support.bean.UpperCaseBean;
 import com.nexacro.spring.util.ReflectionUtil;
+import com.nexacro.xapi.data.ColumnHeader;
 import com.nexacro.xapi.data.DataSet;
 
 public class ObjectToDataSetConverterTest {
@@ -108,6 +111,51 @@ public class ObjectToDataSetConverterTest {
         DataSet dataset = (DataSet) ds;
         Assert.assertNotNull("dataset should not be null", dataset);
         Assert.assertEquals("ds", dataset.getName());
+    }
+    
+    @Test
+    public void testUpperCase() {
+    	
+    	String[] expectedColumnNames = {
+      		  "firstOnly"
+      		  , "FIrstAndSecond"
+      		  , "ALL"
+        };
+    	
+    	String[] expectecColumnValues = {
+    			"first"
+    			, "second"
+    			, "all"
+    	};
+    	
+		UpperCaseBean upperCaseBean = new UpperCaseBean();
+		upperCaseBean.setFirstOnly(expectecColumnValues[0]);
+		upperCaseBean.setFIrstAndSecond(expectecColumnValues[1]);
+		upperCaseBean.setALL(expectecColumnValues[2]);
+		
+		ConvertDefinition definition = new ConvertDefinition("ds");
+		DataSet ds = null;
+		try {
+		    ds = converter.convert(upperCaseBean, definition);
+		} catch (NexacroConvertException e) {
+		    Assert.fail(e.getMessage());
+		}
+		
+		Assert.assertNotNull("converted list should not be null.", ds);
+		
+		
+		
+		Assert.assertEquals("three columns must be exist.", expectedColumnNames.length, ds.getColumnCount());
+		
+		for(int i=0; i<expectedColumnNames.length; i++) {
+		  ColumnHeader column = ds.getColumn(expectedColumnNames[i]);
+		  Assert.assertNotNull(expectedColumnNames[i] + " field not converted.", column);
+		  
+		  String actualValue = ds.getString(0, expectedColumnNames[i]);
+		  Assert.assertEquals(expectedColumnNames[i] + " value not converted.", expectecColumnValues[i], actualValue);
+		}
+          
+    	
     }
     
     @Test
