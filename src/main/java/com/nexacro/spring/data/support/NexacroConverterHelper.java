@@ -59,6 +59,8 @@ public abstract class NexacroConverterHelper {
         nonPrimitiveTypeMap.put(BigDecimal.class, BigDecimal.class);
         nonPrimitiveTypeMap.put(Date.class, Date.class);
         nonPrimitiveTypeMap.put(java.sql.Date.class, java.sql.Date.class); // used java.util.map in ibatis
+        nonPrimitiveTypeMap.put(java.sql.Timestamp.class, java.sql.Timestamp.class); // used java.util.map in ibatis
+        nonPrimitiveTypeMap.put(java.sql.Time.class, java.sql.Time.class); // used java.util.map in ibatis
         
         Set<Class<?>> keySet = primitiveTypeWrapperMap.keySet();
         for(Class<?> clazz: keySet) {
