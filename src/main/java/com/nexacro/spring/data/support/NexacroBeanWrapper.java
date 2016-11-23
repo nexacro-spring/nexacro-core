@@ -306,6 +306,7 @@ return new String(chars);
             }
             
             if(!NexacroConverterHelper.isConvertibleType(descriptor.getPropertyType())) {
+            	logger.debug(descriptor.getPropertyType() + " type of "+ name + " is ignored.");
                 // unsupported type
                 return false;
             }

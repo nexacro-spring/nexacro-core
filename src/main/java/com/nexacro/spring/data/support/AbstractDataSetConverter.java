@@ -158,6 +158,7 @@ public class AbstractDataSetConverter extends AbstractListenerHandler {
             Class<?> propertyType = property.getPropertyType();
             
             if(!NexacroConverterHelper.isConvertibleType(propertyType)) {
+            	logger.debug(propertyType + " type of "+ propertyName + " is ignored because it can not be converted.");
                 continue;
             }
             DataType dataTypeOfValue = NexacroConverterHelper.getDataType(propertyType);
@@ -190,6 +191,7 @@ public class AbstractDataSetConverter extends AbstractListenerHandler {
 
 		// add column
 		if (!NexacroConverterHelper.isConvertibleType(value.getClass())) {
+			logger.debug(value.getClass() + " type of "+ columnName + " is ignored because it can not be converted.");
 			return false;
 		}
 		DataType dataTypeOfValue = NexacroConverterHelper.getDataTypeOfValue(value);
