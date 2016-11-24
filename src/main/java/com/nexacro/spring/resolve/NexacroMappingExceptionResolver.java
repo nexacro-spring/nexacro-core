@@ -130,7 +130,8 @@ public class NexacroMappingExceptionResolver extends AbstractHandlerExceptionRes
 
 	private void prepareResolveException(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
 	    
-        logException(ex, request);
+		// shouldLogStackTrace 값으로 처리. 
+        // logException(ex, request);
 
         if(this.shouldLogStackTrace) {
         	String exceptionMessage = getExceptionLogMessage(ex);
