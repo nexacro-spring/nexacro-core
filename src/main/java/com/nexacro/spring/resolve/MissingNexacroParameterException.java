@@ -10,7 +10,7 @@ public class MissingNexacroParameterException extends NexacroConvertException {
 
 
 	/**
-	 * Constructor for MissingServletRequestParameterException.
+	 * Constructor for MissingNexacroParameterException.
 	 * @param parameterName the name of the missing parameter
 	 * @param parameterType the expected type of the missing parameter
 	 */
