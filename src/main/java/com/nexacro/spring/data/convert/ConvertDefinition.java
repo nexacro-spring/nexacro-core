@@ -1,5 +1,7 @@
 package com.nexacro.spring.data.convert;
 
+import com.nexacro.xapi.data.DataSet;
+
 
 /**
  * <p>데이터 변환에 대한 정보를 저장한다.
@@ -16,6 +18,9 @@ public class ConvertDefinition {
     private String name;
     private Class genericType; // for generic
     private boolean isIgnoreException = false;
+    
+    private DataSet schemaDataSet;
+    private boolean disallowChangeStructure; // (v1.0.0에서  허용 하게 되어 있음)
 
     public ConvertDefinition(String name) {
         setName(name);
@@ -67,5 +72,37 @@ public class ConvertDefinition {
     public void setGenericType(Class genericType) {
         this.genericType = genericType;
     }
+
+    /**
+     * 
+     * @return disallow structure change
+     */
+	public boolean isDisallowChangeStructure() {
+		return disallowChangeStructure;
+	}
+
+	/**
+	 * 
+	 * @param disallow structure change
+	 */
+	public void setDisallowChangeStructure(boolean disallowChangeStructure) {
+		this.disallowChangeStructure = disallowChangeStructure;
+	}
+
+	/**
+     * 
+     * @return the schema dataSet
+     */
+	public DataSet getSchemaDataSet() {
+		return schemaDataSet;
+	}
+
+	/**
+	 * 
+	 * @param schemaDataSet
+	 */
+	public void setSchemaDataSet(DataSet schemaDataSet) {
+		this.schemaDataSet = schemaDataSet;
+	}
 
 }

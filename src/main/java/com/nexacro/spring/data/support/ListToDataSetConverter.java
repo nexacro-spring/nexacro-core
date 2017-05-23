@@ -88,10 +88,15 @@ public class ListToDataSetConverter extends AbstractDataSetConverter implements 
     
     private DataSet convertListMapToDataSet(List source, ConvertDefinition definition, Map availableFirstData) throws NexacroConvertException {
         
-        DataSet ds = new DataSet(definition.getName());
+        DataSet ds = null;
         
-        // dynamic하게 변경 된 데이터는 처리 하지 않는다.
-        addColumnIntoDataSet(ds, availableFirstData);
+        if(definition.getSchemaDataSet() != null) {
+        	// set schema dataSet
+	        ds = definition.getSchemaDataSet();
+        } else {
+        	ds = new DataSet(definition.getName());
+	        addColumnIntoDataSet(ds, availableFirstData);
+        }
         
         for(Object obj: source) {
             
@@ -99,7 +104,7 @@ public class ListToDataSetConverter extends AbstractDataSetConverter implements 
                 throw new NexacroConvertException("list should use the generic type. target="+ds.getName());
             }
             
-            addRowIntoDataSet(ds, (Map) obj);
+            addRowIntoDataSet(ds, (Map) obj, definition.isDisallowChangeStructure());
         }
         
         return ds;
@@ -112,9 +117,20 @@ public class ListToDataSetConverter extends AbstractDataSetConverter implements 
             throw new NexacroConvertException("unsupported generic type. type="+availableFirstData.getClass());
         }
         
-        DataSet ds = new DataSet(definition.getName());
-        
-        addColumnIntoDataSet(ds, availableFirstData);
+        DataSet ds = null;
+        if(definition.getSchemaDataSet() != null) {
+        	// set schema dataSet
+	        ds = definition.getSchemaDataSet();
+	        
+	        // map과 달리 bean은 이미 정의가 되어 있기 때문에 row를 추가할때 컬럼을 추가하지 않고, 미리 설정한다.
+	        if(!definition.isDisallowChangeStructure()) {
+	        	addColumnIntoDataSet(ds, availableFirstData);
+	        }
+	        
+        } else {
+        	ds = new DataSet(definition.getName());
+	        addColumnIntoDataSet(ds, availableFirstData);
+        }
         
         for(Object obj: source) {
             addRowIntoDataSet(ds, obj);

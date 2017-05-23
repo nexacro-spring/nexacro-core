@@ -20,6 +20,7 @@ import com.nexacro.spring.util.ReflectionUtil;
 import com.nexacro.xapi.data.ColumnHeader;
 import com.nexacro.xapi.data.ConstantColumnHeader;
 import com.nexacro.xapi.data.DataSet;
+import com.nexacro.xapi.data.datatype.PlatformDataType;
 
 /**
  *
@@ -100,7 +101,7 @@ public class ListToDataSetConverterTest {
             Assert.fail("converted object must be implemented DataSet");
         }
         
-        NexacroTestUtil.compareDefaultDataSet((DataSet) ds);
+        NexacroTestUtil.compareDefaultDataSet((DataSet) ds, 0);
         
     }
     
@@ -123,7 +124,7 @@ public class ListToDataSetConverterTest {
             Assert.fail("converted object must be implemented DataSet");
         }
         
-        NexacroTestUtil.compareDefaultDataSet((DataSet) ds);
+        NexacroTestUtil.compareDefaultDataSet((DataSet) ds, 0);
         
     }
     
@@ -233,6 +234,207 @@ public class ListToDataSetConverterTest {
         Assert.assertEquals("tom", ds.getString(0, "name"));
         Assert.assertEquals("david", ds.getString(1, "name"));
         
+    }
+    
+    @Test
+    public void testAllowChangeStructure() {
+    	// v1.0.0에서 Map의 null 컬럼 추가 되는 것을 확인한다.
+    	List<Map<String, Object>> defaultMap = new ArrayList<Map<String, Object>>();
+    	{
+    		Map<String, Object> map = new HashMap<String, Object>();
+    		map.put("col1", "value");
+    		defaultMap.add(map);
+    	}
+    	{
+    		Map<String, Object> map = new HashMap<String, Object>();
+    		map.put("col2", "value");
+    		defaultMap.add(map);
+    	}
+    	
+        ConvertDefinition definition = new ConvertDefinition("ds");
+        definition.setDisallowChangeStructure(false); // set allow structure change
+        
+        Object dsObj = null;
+        try {
+        	dsObj = converter.convert(defaultMap, definition);
+        } catch (NexacroConvertException e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+        
+        DataSet ds = (DataSet) dsObj;
+        
+        Assert.assertTrue(ds.containsColumn("col1"));
+        Assert.assertTrue(ds.containsColumn("col2"));
+        
+    }
+    
+    @Test
+    public void testDisallowChangeStructure() {
+    	
+    	List<Map<String, Object>> defaultMap = new ArrayList<Map<String, Object>>();
+    	{
+    		Map<String, Object> map = new HashMap<String, Object>();
+    		map.put("col1", "value");
+    		defaultMap.add(map);
+    	}
+    	{
+    		Map<String, Object> map = new HashMap<String, Object>();
+    		map.put("col2", "value");
+    		defaultMap.add(map);
+    	}
+    	
+        ConvertDefinition definition = new ConvertDefinition("ds");
+        definition.setDisallowChangeStructure(true); // set disallow structure change
+        
+        Object dsObj = null;
+        try {
+        	dsObj = converter.convert(defaultMap, definition);
+        } catch (NexacroConvertException e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+
+        DataSet ds = (DataSet) dsObj;
+        
+        Assert.assertTrue(ds.containsColumn("col1"));
+        Assert.assertFalse(ds.containsColumn("col2"));
+
+    }
+    
+    @Test
+    public void testAllowChangeStructureWithSchemaDataSet() {
+    	
+    	DataSet schemaDataSet = new DataSet("schemaDa");
+    	schemaDataSet.addColumn("defaultCol1", PlatformDataType.STRING);
+    	
+    	List<Map<String, Object>> defaultMap = new ArrayList<Map<String, Object>>();
+    	{
+    		Map<String, Object> map = new HashMap<String, Object>();
+    		map.put("col1", "value");
+    		defaultMap.add(map);
+    	}
+    	{
+    		Map<String, Object> map = new HashMap<String, Object>();
+    		map.put("col2", "value");
+    		defaultMap.add(map);
+    	}
+    	
+        ConvertDefinition definition = new ConvertDefinition("ds");
+        definition.setDisallowChangeStructure(false); // set allow structure change
+        definition.setSchemaDataSet(schemaDataSet); // set schema dataSet
+        
+        Object dsObj = null;
+        try {
+        	dsObj = converter.convert(defaultMap, definition);
+        } catch (NexacroConvertException e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+
+        DataSet ds = (DataSet) dsObj;
+        Assert.assertTrue(schemaDataSet.equals(ds));
+        
+        Assert.assertTrue(ds.containsColumn("defaultCol1"));
+        Assert.assertTrue(ds.containsColumn("col1"));
+        Assert.assertTrue(ds.containsColumn("col2"));
+    	
+    }
+    
+    @Test
+    public void testAllowChangeStructureWithSchemaDataSetWithBean() {
+    	
+    	DataSet schemaDataSet = new DataSet("schemaDa");
+    	schemaDataSet.addColumn("defaultCol1", PlatformDataType.STRING);
+    	
+    	List<DefaultBean> defaultBean = NexacroTestUtil.createDefaultBeans();
+        
+        ConvertDefinition definition = new ConvertDefinition("ds");
+        definition.setDisallowChangeStructure(false); // set allow structure change
+        definition.setSchemaDataSet(schemaDataSet); // set schema dataSet
+        
+        Object dsObj = null;
+        try {
+        	dsObj = converter.convert(defaultBean, definition);
+        } catch (NexacroConvertException e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+        
+
+        DataSet ds = (DataSet) dsObj;
+        Assert.assertTrue(schemaDataSet.equals(ds));
+        Assert.assertTrue(ds.containsColumn("defaultCol1"));
+        NexacroTestUtil.compareDefaultDataSet(ds, 1); // defaultColumn
+        
+    }
+    
+    @Test
+    public void testDisallowChangeStructureWithSchemaDataSet() {
+    	
+    	DataSet schemaDataSet = new DataSet("schemaDa");
+    	schemaDataSet.addColumn("defaultCol1", PlatformDataType.STRING);
+    	
+    	List<Map<String, Object>> defaultMap = new ArrayList<Map<String, Object>>();
+    	{
+    		Map<String, Object> map = new HashMap<String, Object>();
+    		map.put("col1", "value");
+    		defaultMap.add(map);
+    	}
+    	{
+    		Map<String, Object> map = new HashMap<String, Object>();
+    		map.put("col2", "value");
+    		defaultMap.add(map);
+    	}
+    	
+        ConvertDefinition definition = new ConvertDefinition("ds");
+        definition.setDisallowChangeStructure(true); // set disallow structure change
+        definition.setSchemaDataSet(schemaDataSet); // set schema dataSet
+        
+        Object dsObj = null;
+        try {
+        	dsObj = converter.convert(defaultMap, definition);
+        } catch (NexacroConvertException e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+
+        DataSet ds = (DataSet) dsObj;
+        Assert.assertTrue(schemaDataSet.equals(ds));
+        
+        Assert.assertTrue(ds.containsColumn("defaultCol1"));
+        Assert.assertFalse(ds.containsColumn("col1"));
+        Assert.assertFalse(ds.containsColumn("col2"));
+    	
+    }
+    
+    @Test
+    public void testDisallowChangeStructureWithSchemaDataSetWithBean() {
+    	
+    	DataSet schemaDataSet = new DataSet("schemaDa");
+    	schemaDataSet.addColumn("defaultCol1", PlatformDataType.STRING);
+    	
+    	List<DefaultBean> defaultBean = NexacroTestUtil.createDefaultBeans();
+        
+        ConvertDefinition definition = new ConvertDefinition("ds");
+        definition.setDisallowChangeStructure(true); // set disallow structure change
+        definition.setSchemaDataSet(schemaDataSet); // set schema dataSet
+        
+        Object dsObj = null;
+        try {
+        	dsObj = converter.convert(defaultBean, definition);
+        } catch (NexacroConvertException e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+        
+
+        DataSet ds = (DataSet) dsObj;
+        Assert.assertTrue(schemaDataSet.equals(ds));
+        Assert.assertTrue(ds.containsColumn("defaultCol1"));
+        
+        Assert.assertEquals(ds.getColumnCount(), 1);
+    	
     }
     
     @Test

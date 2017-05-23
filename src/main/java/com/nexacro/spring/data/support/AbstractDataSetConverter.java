@@ -37,7 +37,7 @@ public class AbstractDataSetConverter extends AbstractListenerHandler {
      * @param map
      * @throws NexacroConvertException
      */
-    protected void addRowIntoDataSet(DataSet ds, Map map) throws NexacroConvertException {
+    protected void addRowIntoDataSet(DataSet ds, Map map, boolean disallowChangeStructure) throws NexacroConvertException {
         // ignore null data.
         if(map == null) {
             return;
@@ -62,11 +62,15 @@ public class AbstractDataSetConverter extends AbstractListenerHandler {
             
             int columnIndex = ds.indexOfColumn(columnName);
             if(columnIndex < 0) {
-            	// flexible map data. 'null' data should be ignored
-            	ds.setChangeStructureWithData(true);
-
-            	if(!addColumnByMap(ds, columnName, value)) {
-            		continue;
+            	if(disallowChangeStructure) {
+            		// ignore
+	            	continue;
+            	} else {
+            		// flexible map data. 'null' data should be ignored
+	            	ds.setChangeStructureWithData(true);
+	            	if(!addColumnByMap(ds, columnName, value)) {
+	            		continue;
+	            	}
             	}
             }
             // fire event
@@ -108,7 +112,13 @@ public class AbstractDataSetConverter extends AbstractListenerHandler {
             // Byte[] 변환
             Object object = NexacroConverterHelper.toObject(propertyValue);
             
+            // 컬럼은 무조건 존재한다.
             int columnIndex = ds.indexOfColumn(propertyName);
+            if(columnIndex < 0) {
+            	// Map과 달리 이미 구조 변경에 대한 처리가 되었기 때문에 컬럼이 존재하지 않을 경우 무시하도록 한다.
+            	continue;
+            }
+            
             // fire event
             object = fireDataSetConvertedValue(ds, object, newRow, columnIndex, false, false);
             
@@ -127,6 +137,9 @@ public class AbstractDataSetConverter extends AbstractListenerHandler {
      * @throws NexacroConvertException
      */
     protected void addColumnIntoDataSet(DataSet ds, Map map) throws NexacroConvertException {
+    	
+    	ds.setChangeStructureWithData(true);
+    	
         Iterator iterator = map.keySet().iterator();
         while(iterator.hasNext()) {
             Object key = iterator.next();
@@ -149,6 +162,8 @@ public class AbstractDataSetConverter extends AbstractListenerHandler {
      */
     protected void addColumnIntoDataSet(DataSet ds, Object availableFirstData) {
      
+    	ds.setChangeStructureWithData(true);
+    	
         NexacroBeanWrapper beanWrapper = NexacroBeanWrapper.createBeanWrapper(availableFirstData);
         
         NexacroBeanProperty[] beanProperties = beanWrapper.getProperties();

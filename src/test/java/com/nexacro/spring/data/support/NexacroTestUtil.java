@@ -206,13 +206,13 @@ public abstract class NexacroTestUtil {
     
     
 
-    public static void compareDefaultDataSet(DataSet ds) {
+    public static void compareDefaultDataSet(DataSet ds, int addedColumns) {
 
         if (ds == null) {
             Assert.fail("compare DataSet is null");
         }
 
-        int expectedSize = dsPropertyNames.length;
+        int expectedSize = dsPropertyNames.length + addedColumns;
         int actualSize = ds.getColumnCount();
         Assert.assertEquals("DataSet column does not matched. please check converted columns. expected=" + expectedSize
                 + ", actual=" + actualSize, expectedSize, actualSize);

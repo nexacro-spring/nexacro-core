@@ -19,6 +19,7 @@ import com.nexacro.spring.data.support.bean.UpperCaseBean;
 import com.nexacro.spring.util.ReflectionUtil;
 import com.nexacro.xapi.data.ColumnHeader;
 import com.nexacro.xapi.data.DataSet;
+import com.nexacro.xapi.data.datatype.PlatformDataType;
 
 public class ObjectToDataSetConverterTest {
 
@@ -111,6 +112,124 @@ public class ObjectToDataSetConverterTest {
         DataSet dataset = (DataSet) ds;
         Assert.assertNotNull("dataset should not be null", dataset);
         Assert.assertEquals("ds", dataset.getName());
+    }
+    
+    @Test
+    public void testAllowChangeStructureWithSchemaDataSet() {
+    	
+    	DataSet schemaDataSet = new DataSet("schemaDa");
+    	schemaDataSet.addColumn("defaultCol1", PlatformDataType.STRING);
+    	
+    	Map<String, Object> map = new HashMap<String, Object>();
+		map.put("col1", "value");
+    	
+        ConvertDefinition definition = new ConvertDefinition("ds");
+        definition.setDisallowChangeStructure(false); // set allow structure change
+        definition.setSchemaDataSet(schemaDataSet); // set schema dataSet
+        
+        Object dsObj = null;
+        try {
+        	dsObj = converter.convert(map, definition);
+        } catch (NexacroConvertException e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+
+        DataSet ds = (DataSet) dsObj;
+        Assert.assertTrue(schemaDataSet.equals(ds));
+        
+        Assert.assertTrue(ds.containsColumn("defaultCol1"));
+        Assert.assertTrue(ds.containsColumn("col1"));
+    	
+    }
+    
+    @Test
+    public void testAllowChangeStructureWithSchemaDataSetWithBean() {
+    	
+    	DataSet schemaDataSet = new DataSet("schemaDa");
+    	schemaDataSet.addColumn("defaultCol1", PlatformDataType.STRING);
+    	
+    	DefaultBean defaultBean = new DefaultBean();
+		defaultBean.setLastName("Kim");
+        
+        ConvertDefinition definition = new ConvertDefinition("ds");
+        definition.setDisallowChangeStructure(false); // set allow structure change
+        definition.setSchemaDataSet(schemaDataSet); // set schema dataSet
+        
+        Object dsObj = null;
+        try {
+        	dsObj = converter.convert(defaultBean, definition);
+        } catch (NexacroConvertException e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+        
+
+        DataSet ds = (DataSet) dsObj;
+        Assert.assertTrue(schemaDataSet.equals(ds));
+        Assert.assertTrue(ds.containsColumn("defaultCol1"));
+        
+		Assert.assertEquals("Kim", ds.getObject(0, "lastName"));
+        
+    }
+    
+    @Test
+    public void testDisallowChangeStructureWithSchemaDataSet() {
+    	
+    	DataSet schemaDataSet = new DataSet("schemaDa");
+    	schemaDataSet.addColumn("defaultCol1", PlatformDataType.STRING);
+    	
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("col1", "value");
+    	
+        ConvertDefinition definition = new ConvertDefinition("ds");
+        definition.setDisallowChangeStructure(true); // set disallow structure change
+        definition.setSchemaDataSet(schemaDataSet); // set schema dataSet
+        
+        Object dsObj = null;
+        try {
+        	dsObj = converter.convert(map, definition);
+        } catch (NexacroConvertException e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+
+        DataSet ds = (DataSet) dsObj;
+        Assert.assertTrue(schemaDataSet.equals(ds));
+        
+        Assert.assertTrue(ds.containsColumn("defaultCol1"));
+        Assert.assertFalse(ds.containsColumn("col1"));
+        Assert.assertFalse(ds.containsColumn("col2"));
+    	
+    }
+    
+    @Test
+    public void testDisallowChangeStructureWithSchemaDataSetWithBean() {
+    	
+    	DataSet schemaDataSet = new DataSet("schemaDa");
+    	schemaDataSet.addColumn("defaultCol1", PlatformDataType.STRING);
+    	
+    	DefaultBean defaultBean = new DefaultBean();
+		defaultBean.setLastName("Kim");
+        
+        ConvertDefinition definition = new ConvertDefinition("ds");
+        definition.setDisallowChangeStructure(true); // set disallow structure change
+        definition.setSchemaDataSet(schemaDataSet); // set schema dataSet
+        
+        Object dsObj = null;
+        try {
+        	dsObj = converter.convert(defaultBean, definition);
+        } catch (NexacroConvertException e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+        
+        DataSet ds = (DataSet) dsObj;
+        Assert.assertTrue(schemaDataSet.equals(ds));
+        Assert.assertTrue(ds.containsColumn("defaultCol1"));
+        
+        Assert.assertEquals(ds.getColumnCount(), 1);
+    	
     }
     
     @Test

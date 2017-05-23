@@ -61,17 +61,37 @@ public class ObjectToDataSetConverter extends AbstractDataSetConverter implement
         if(!NexacroConverterHelper.isSupportedBean(source.getClass())) {
             throw new NexacroConvertException("unsupported source type. type="+source.getClass());
         }
+
+        DataSet ds = null;
+        if(definition.getSchemaDataSet() != null) {
+        	// set schema dataSet
+	        ds = definition.getSchemaDataSet();
+	        
+	        // map과 달리 bean은 이미 정의가 되어 있기 때문에 row를 추가할때 컬럼을 추가하지 않고, 미리 설정한다.
+	        if(!definition.isDisallowChangeStructure()) {
+	        	addColumnIntoDataSet(ds, source);
+	        }
+	        
+        } else {
+        	ds = new DataSet(definition.getName());
+	        addColumnIntoDataSet(ds, source);
+        }
         
-        DataSet ds = new DataSet(definition.getName());
-        addColumnIntoDataSet(ds, source);
         addRowIntoDataSet(ds, source);
         return ds;
     }
     
     private DataSet convertMapToDataSet(Map source, ConvertDefinition definition) throws NexacroConvertException {
-        DataSet ds = new DataSet(definition.getName());
-        addColumnIntoDataSet(ds, source);
-        addRowIntoDataSet(ds, source);
+        DataSet ds = null;
+        if(definition.getSchemaDataSet() != null) {
+        	// set schema dataSet
+	        ds = definition.getSchemaDataSet();
+        } else {
+        	ds = new DataSet(definition.getName());
+	        addColumnIntoDataSet(ds, source);
+        }
+        
+        addRowIntoDataSet(ds, source, definition.isDisallowChangeStructure());
         return ds;
     }
     
@@ -86,8 +106,8 @@ public class ObjectToDataSetConverter extends AbstractDataSetConverter implement
     }
     
     @Override
-    public void addRowIntoDataSet(DataSet ds, Map source) throws NexacroConvertException {
-        super.addRowIntoDataSet(ds, source);
+    public void addRowIntoDataSet(DataSet ds, Map source, boolean disallowChangeStructure) throws NexacroConvertException {
+        super.addRowIntoDataSet(ds, source, disallowChangeStructure);
     }
     
     @Override
