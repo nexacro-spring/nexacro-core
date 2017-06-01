@@ -46,13 +46,13 @@ public class ListToDataSetConverter extends AbstractDataSetConverter implements 
             throw new IllegalArgumentException(ConvertDefinition.class.getSimpleName()+" must not be null.");
         }
         if(source == null) {
-            return new DataSet(definition.getName());
+            return createDataSet(definition);
         }
         
         // check first value
         Object availableFirstData = checkAvailable(source);
         if(availableFirstData == null) {
-            return new DataSet(definition.getName());
+            return createDataSet(definition);
         }
         
         // DataSet SavedType은 처리 하지 않는다. (UI 처리 불필요)
@@ -92,9 +92,9 @@ public class ListToDataSetConverter extends AbstractDataSetConverter implements 
         
         if(definition.getSchemaDataSet() != null) {
         	// set schema dataSet
-	        ds = definition.getSchemaDataSet();
+	        ds = createDataSet(definition);
         } else {
-        	ds = new DataSet(definition.getName());
+        	ds = createDataSet(definition);
 	        addColumnIntoDataSet(ds, availableFirstData);
         }
         
@@ -120,7 +120,7 @@ public class ListToDataSetConverter extends AbstractDataSetConverter implements 
         DataSet ds = null;
         if(definition.getSchemaDataSet() != null) {
         	// set schema dataSet
-	        ds = definition.getSchemaDataSet();
+	        ds = createDataSet(definition);
 	        
 	        // map과 달리 bean은 이미 정의가 되어 있기 때문에 row를 추가할때 컬럼을 추가하지 않고, 미리 설정한다.
 	        if(!definition.isDisallowChangeStructure()) {
@@ -128,7 +128,7 @@ public class ListToDataSetConverter extends AbstractDataSetConverter implements 
 	        }
 	        
         } else {
-        	ds = new DataSet(definition.getName());
+        	ds = createDataSet(definition);
 	        addColumnIntoDataSet(ds, availableFirstData);
         }
         

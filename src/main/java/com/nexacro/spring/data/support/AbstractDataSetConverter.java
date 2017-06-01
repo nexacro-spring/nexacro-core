@@ -10,6 +10,7 @@ import org.springframework.beans.PropertyAccessException;
 
 import com.nexacro.spring.data.DataSetRowTypeAccessor;
 import com.nexacro.spring.data.DataSetSavedDataAccessor;
+import com.nexacro.spring.data.convert.ConvertDefinition;
 import com.nexacro.spring.data.convert.NexacroConvertException;
 import com.nexacro.spring.util.ReflectionUtil;
 import com.nexacro.xapi.data.DataSet;
@@ -375,6 +376,15 @@ public class AbstractDataSetConverter extends AbstractListenerHandler {
         }
     	
     	return false;
+    }
+    
+    protected DataSet createDataSet(ConvertDefinition definition) {
+    	DataSet schemaDataSet = definition.getSchemaDataSet();
+    	if(schemaDataSet != null) {
+    		return schemaDataSet;
+    	} else {
+    		return new DataSet(definition.getName());
+    	}
     }
     
 }
