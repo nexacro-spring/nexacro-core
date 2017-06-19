@@ -1,5 +1,7 @@
 package com.nexacro.spring.data.support;
 
+import static junit.framework.Assert.assertEquals;
+
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -20,6 +22,7 @@ import com.nexacro.spring.util.ReflectionUtil;
 import com.nexacro.xapi.data.ColumnHeader;
 import com.nexacro.xapi.data.ConstantColumnHeader;
 import com.nexacro.xapi.data.DataSet;
+import com.nexacro.xapi.data.Debugger;
 import com.nexacro.xapi.data.datatype.PlatformDataType;
 
 /**
@@ -435,6 +438,65 @@ public class ListToDataSetConverterTest {
         
         Assert.assertEquals(ds.getColumnCount(), 1);
     	
+    }
+    
+    @Test
+    public void testConvertListMapToDataSetIncludeNullRow() {
+        
+    	List<Map<String, Object>> defaultMap = new ArrayList<Map<String, Object>>();
+    	defaultMap.add(null); // add null row
+    	
+    	{
+    		Map<String, Object> map = new HashMap<String, Object>();
+    		map.put("col1", "value");
+    		defaultMap.add(map);
+    	}
+    	defaultMap.add(null);     	// add null row
+    	{
+    		Map<String, Object> map = new HashMap<String, Object>();
+    		map.put("col1", "value");
+    		defaultMap.add(map);
+    	}
+    	
+        ConvertDefinition definition = new ConvertDefinition("ds");
+        
+        Object dsObj = null;
+        try {
+        	dsObj = converter.convert(defaultMap, definition);
+        } catch (NexacroConvertException e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+
+        DataSet ds = (DataSet) dsObj;
+        
+        assertEquals(defaultMap.size(), ds.getRowCount());
+        Assert.assertTrue(ds.containsColumn("col1"));
+        
+    }
+    
+    @Test
+    public void testConvertListBeanToDataSetIncludeNullRow() {
+        
+    	List<DefaultBean> defaultBean = NexacroTestUtil.createDefaultBeans();
+    	defaultBean.add(0, null); // add null row
+    	defaultBean.add(null); // add null row
+        
+        ConvertDefinition definition = new ConvertDefinition("ds");
+        
+        Object dsObj = null;
+        try {
+        	dsObj = converter.convert(defaultBean, definition);
+        } catch (NexacroConvertException e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+        
+        DataSet ds = (DataSet) dsObj;
+        
+        assertEquals(defaultBean.size(), ds.getRowCount());
+        Assert.assertTrue(ds.containsColumn("employeeId"));
+        
     }
     
     @Test

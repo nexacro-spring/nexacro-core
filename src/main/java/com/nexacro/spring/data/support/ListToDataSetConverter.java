@@ -1,5 +1,6 @@
 package com.nexacro.spring.data.support;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -83,7 +84,8 @@ public class ListToDataSetConverter extends AbstractDataSetConverter implements 
             }
         }
         
-        return null;
+        // apply null row (empty column)
+        return new HashMap();
     }
     
     private DataSet convertListMapToDataSet(List source, ConvertDefinition definition, Map availableFirstData) throws NexacroConvertException {
@@ -99,11 +101,6 @@ public class ListToDataSetConverter extends AbstractDataSetConverter implements 
         }
         
         for(Object obj: source) {
-            
-            if(!(obj instanceof Map)) {
-                throw new NexacroConvertException("list should use the generic type. target="+ds.getName());
-            }
-            
             addRowIntoDataSet(ds, (Map) obj, definition.isDisallowChangeStructure());
         }
         

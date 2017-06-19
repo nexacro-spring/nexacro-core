@@ -39,12 +39,13 @@ public class AbstractDataSetConverter extends AbstractListenerHandler {
      * @throws NexacroConvertException
      */
     protected void addRowIntoDataSet(DataSet ds, Map map, boolean disallowChangeStructure) throws NexacroConvertException {
-        // ignore null data.
+    	
+        int newRow = ds.newRow();
+        // ignore null data. (add null row)
         if(map == null) {
             return;
         }
-
-        int newRow = ds.newRow();
+        
         Iterator iterator = map.keySet().iterator();
         while(iterator.hasNext()) {
             Object key = iterator.next();
@@ -91,11 +92,10 @@ public class AbstractDataSetConverter extends AbstractListenerHandler {
      */
     protected void addRowIntoDataSet(DataSet ds, Object obj) {
         
-        if(obj == null) { // ignore null data
+        int newRow = ds.newRow();
+        if(obj == null) { // ignore null data (add null row)
             return;
         }
-        
-        int newRow = ds.newRow();
         
         NexacroBeanWrapper beanWrapper = NexacroBeanWrapper.createBeanWrapper(obj);
         
